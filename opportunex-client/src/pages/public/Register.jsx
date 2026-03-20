@@ -8,33 +8,28 @@ import { useAuth } from '@/context/AuthContext';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import Select from '@/components/ui/Select';
-import Card from '@/components/ui/Card';
-import { UserPlus, Briefcase, GraduationCap } from 'lucide-react';
 import { UNIVERSITIES } from '@/utils/constants';
 
 const registerSchema = z.object({
-  firstName: z.string().min(2, 'First name is required'),
-  lastName: z.string().min(2, 'Last name is required'),
-  email: z.string().email('Invalid email address'),
-  password: z.string().min(6, 'Password must be at least 6 characters'),
+  firstName:       z.string().min(2, 'Required'),
+  lastName:        z.string().min(2, 'Required'),
+  email:           z.string().email('Invalid email'),
+  password:        z.string().min(6, 'Min. 6 characters'),
   confirmPassword: z.string(),
-  role: z.enum(['youth', 'employer']),
-  // Youth fields
-  university: z.string().optional(),
-  major: z.string().optional(),
-  // Employer fields
-  companyName: z.string().optional(),
-  industry: z.string().optional(),
-}).refine((data) => data.password === data.confirmPassword, {
+  role:            z.enum(['youth', 'employer']),
+  university:      z.string().optional(),
+  major:           z.string().optional(),
+  companyName:     z.string().optional(),
+  industry:        z.string().optional(),
+}).refine((d) => d.password === d.confirmPassword, {
   message: "Passwords don't match",
   path: ['confirmPassword'],
 });
 
 const Register = () => {
   const [searchParams] = useSearchParams();
-  const initialRole = searchParams.get('role') || '';
+  const initialRole = searchParams.get('role') === 'employer' ? 'employer' : 'youth';
   const [loading, setLoading] = useState(false);
-  const [selectedRole, setSelectedRole] = useState(initialRole);
   const { register: registerUser } = useAuth();
   const navigate = useNavigate();
 
@@ -42,96 +37,133 @@ const Register = () => {
     register,
     handleSubmit,
     watch,
+    setValue,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(registerSchema),
-    defaultValues: {
-      role: initialRole || 'youth',
-    },
+    defaultValues: { role: initialRole },
   });
 
   const role = watch('role');
+
+  const switchRole = (r) => setValue('role', r, { shouldValidate: false });
 
   const onSubmit = async (data) => {
     setLoading(true);
     try {
       const result = await registerUser(data);
       if (result.success) {
-        toast.success('Registration successful! Welcome to OpportuneX');
-
-        // Redirect based on role
-        const dashboardMap = {
-          youth: '/youth/dashboard',
-          employer: '/employer/dashboard',
-        };
-        navigate(dashboardMap[result.user.role] || '/');
+        toast.success('Welcome to OpportuneX');
+        const map = { youth: '/youth/dashboard', employer: '/employer/dashboard' };
+        navigate(map[result.user.role] || '/');
       } else {
         toast.error(result.message || 'Registration failed');
       }
-    } catch (error) {
-      toast.error('An error occurred. Please try again.');
+    } catch {
+      toast.error('Something went wrong. Please try again.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-[calc(100vh-64px)] flex items-center justify-center bg-gray-50 py-12 px-4">
-      <div className="w-full max-w-2xl">
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-primary rounded-2xl mb-4">
-            <UserPlus className="w-8 h-8 text-white" />
-          </div>
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">Join OpportuneX</h2>
-          <p className="text-gray-600">Create your account and start your journey</p>
+    <div className="flex min-h-[calc(100vh-56px)]">
+
+      {/* ── Left editorial panel ───────────────────────── */}
+      <div className="hidden lg:flex lg:w-[42%] bg-primary flex-col justify-between p-16 relative overflow-hidden select-none">
+        {/* Subtle texture lines */}
+        <div className="absolute inset-0 opacity-[0.04]"
+          style={{
+            backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,255,255,1) 39px, rgba(255,255,255,1) 40px)',
+          }}
+        />
+
+        <div className="relative z-10">
+          <span className="text-[10px] uppercase tracking-luxury text-white/40 font-medium">
+            Est. Kigali, 2024
+          </span>
         </div>
 
-        <Card>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-            {/* Role Selection */}
-            <div className="grid grid-cols-2 gap-4 p-1 bg-gray-100 rounded-lg">
-              <button
-                type="button"
-                onClick={() => setSelectedRole('youth')}
-                className={`py-3 px-4 rounded-lg font-medium transition-all ${role === 'youth'
-                    ? 'bg-white shadow-sm text-primary'
-                    : 'text-gray-600 hover:text-gray-900'
-                  }`}
-              >
-                <input type="radio" value="youth" {...register('role')} className="hidden" />
-                <div className="flex items-center justify-center gap-2">
-                  <GraduationCap className="w-5 h-5" />
-                  <span>I'm a Student</span>
-                </div>
-              </button>
-              <button
-                type="button"
-                onClick={() => setSelectedRole('employer')}
-                className={`py-3 px-4 rounded-lg font-medium transition-all ${role === 'employer'
-                    ? 'bg-white shadow-sm text-primary'
-                    : 'text-gray-600 hover:text-gray-900'
-                  }`}
-              >
-                <input type="radio" value="employer" {...register('role')} className="hidden" />
-                <div className="flex items-center justify-center gap-2">
-                  <Briefcase className="w-5 h-5" />
-                  <span>I'm an Employer</span>
-                </div>
-              </button>
-            </div>
+        <div className="relative z-10">
+          <h1 className="font-display font-light text-white leading-[1.08] tracking-tight mb-8"
+            style={{ fontSize: 'clamp(2.5rem, 4vw, 3.5rem)' }}>
+            Your Career,<br />
+            <em>Elevated.</em>
+          </h1>
+          <p className="text-white/50 text-sm leading-relaxed max-w-[300px] font-light">
+            Connecting Rwanda's emerging talent with forward-thinking organisations.
+            Your future begins here.
+          </p>
+        </div>
 
-            {/* Common Fields */}
-            <div className="grid grid-cols-2 gap-4">
+        <div className="relative z-10 flex gap-12">
+          <div>
+            <div className="font-display text-white text-3xl font-light">2,400<span className="text-white/40">+</span></div>
+            <div className="text-[10px] uppercase tracking-luxury text-white/30 mt-1">Opportunities</div>
+          </div>
+          <div>
+            <div className="font-display text-white text-3xl font-light">850<span className="text-white/40">+</span></div>
+            <div className="text-[10px] uppercase tracking-luxury text-white/30 mt-1">Companies</div>
+          </div>
+        </div>
+      </div>
+
+      {/* ── Right form panel ──────────────────────────── */}
+      <div className="flex-1 bg-white flex flex-col justify-center overflow-y-auto px-8 md:px-14 lg:px-20 py-14">
+
+        {/* Mobile wordmark */}
+        <div className="lg:hidden mb-10">
+          <span className="font-display text-xl italic text-primary">OpportuneX</span>
+        </div>
+
+        <div className="max-w-[440px] w-full mx-auto">
+
+          {/* Header */}
+          <div className="mb-10">
+            <p className="text-[10px] uppercase tracking-luxury text-stone-400 mb-3">Create Account</p>
+            <h2 className="font-display text-4xl font-light text-stone-900" style={{ letterSpacing: '-0.022em' }}>
+              Join <em>OpportuneX</em>
+            </h2>
+          </div>
+
+          {/* Role selector */}
+          <div className="flex border-b border-stone-200 mb-10">
+            {[
+              { value: 'youth',    label: 'Student / Youth' },
+              { value: 'employer', label: 'Employer'        },
+            ].map(({ value, label }) => (
+              <button
+                key={value}
+                type="button"
+                onClick={() => switchRole(value)}
+                className="relative pb-3 mr-8 transition-colors duration-150"
+              >
+                <span className={`text-[10px] uppercase tracking-label font-medium transition-colors duration-150 ${
+                  role === value ? 'text-stone-900' : 'text-stone-400 hover:text-stone-600'
+                }`}>
+                  {label}
+                </span>
+                {role === value && (
+                  <span className="absolute bottom-0 left-0 right-0 h-px bg-primary" />
+                )}
+              </button>
+            ))}
+          </div>
+
+          {/* Form */}
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-7">
+
+            <div className="grid grid-cols-2 gap-6">
               <Input
                 label="First Name"
-                placeholder="John"
+                placeholder="Jean"
                 error={errors.firstName?.message}
                 {...register('firstName')}
                 required
               />
               <Input
                 label="Last Name"
-                placeholder="Doe"
+                placeholder="Mugisha"
                 error={errors.lastName?.message}
                 {...register('lastName')}
                 required
@@ -141,13 +173,13 @@ const Register = () => {
             <Input
               label="Email Address"
               type="email"
-              placeholder="your.email@example.com"
+              placeholder="you@example.com"
               error={errors.email?.message}
               {...register('email')}
               required
             />
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-6">
               <Input
                 label="Password"
                 type="password"
@@ -159,26 +191,26 @@ const Register = () => {
               <Input
                 label="Confirm Password"
                 type="password"
-                placeholder="Re-enter password"
+                placeholder="Re-enter"
                 error={errors.confirmPassword?.message}
                 {...register('confirmPassword')}
                 required
               />
             </div>
 
-            {/* Role-Specific Fields */}
+            {/* Role-specific fields */}
             {role === 'youth' && (
-              <div className="grid grid-cols-2 gap-4 p-4 bg-blue-50 rounded-lg border border-blue-100">
+              <div className="grid grid-cols-2 gap-6 pt-2 border-t border-stone-100">
                 <Select
                   label="University"
                   options={UNIVERSITIES}
-                  placeholder="Select university"
+                  placeholder="Select"
                   error={errors.university?.message}
                   {...register('university')}
                 />
                 <Input
-                  label="Major/Field of Study"
-                  placeholder="e.g., Computer Science"
+                  label="Field of Study"
+                  placeholder="e.g. Computer Science"
                   error={errors.major?.message}
                   {...register('major')}
                 />
@@ -186,54 +218,53 @@ const Register = () => {
             )}
 
             {role === 'employer' && (
-              <div className="grid grid-cols-2 gap-4 p-4 bg-orange-50 rounded-lg border border-orange-100">
+              <div className="grid grid-cols-2 gap-6 pt-2 border-t border-stone-100">
                 <Input
                   label="Company Name"
-                  placeholder="Your company name"
+                  placeholder="Your company"
                   error={errors.companyName?.message}
                   {...register('companyName')}
                   required
                 />
                 <Input
                   label="Industry"
-                  placeholder="e.g., Technology"
+                  placeholder="e.g. Technology"
                   error={errors.industry?.message}
                   {...register('industry')}
                 />
               </div>
             )}
 
-            <Button
-              type="submit"
-              variant="primary"
-              className="w-full"
-              loading={loading}
-              disabled={loading}
-            >
-              Create Account
-            </Button>
+            <div className="pt-2">
+              <Button
+                type="submit"
+                variant="primary"
+                className="w-full py-4"
+                loading={loading}
+                disabled={loading}
+              >
+                Create Account
+              </Button>
+            </div>
           </form>
 
-          <div className="mt-6 text-center">
-            <p className="text-gray-600">
+          {/* Footer links */}
+          <div className="mt-8 space-y-3">
+            <p className="text-[11px] text-stone-400">
               Already have an account?{' '}
-              <Link to="/login" className="text-primary font-semibold hover:text-primary-600 transition-colors">
+              <Link to="/login" className="text-primary underline-offset-2 hover:underline">
                 Sign in
               </Link>
             </p>
+            <p className="text-[10px] text-stone-300">
+              By creating an account you agree to our{' '}
+              <Link to="/terms" className="underline-offset-2 hover:underline">Terms</Link>
+              {' '}and{' '}
+              <Link to="/privacy" className="underline-offset-2 hover:underline">Privacy Policy</Link>
+            </p>
           </div>
-        </Card>
 
-        <p className="text-center text-sm text-gray-500 mt-6">
-          By signing up, you agree to our{' '}
-          <Link to="/terms" className="text-primary hover:underline">
-            Terms of Service
-          </Link>{' '}
-          and{' '}
-          <Link to="/privacy" className="text-primary hover:underline">
-            Privacy Policy
-          </Link>
-        </p>
+        </div>
       </div>
     </div>
   );

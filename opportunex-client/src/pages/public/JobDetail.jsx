@@ -53,12 +53,12 @@ const JobDetail = () => {
   if (!job) return null;
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-white py-8">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Back Button */}
         <Link
           to="/jobs"
-          className="inline-flex items-center gap-2 text-primary hover:text-primary-600 mb-6 transition-colors"
+          className="inline-flex items-center gap-2 text-stone-400 hover:text-stone-900 mb-6 transition-colors text-sm"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to jobs
@@ -72,18 +72,18 @@ const JobDetail = () => {
               <img
                 src={job.companyLogo}
                 alt={job.companyName}
-                className="w-24 h-24 object-cover rounded-xl border-2 border-gray-200"
+                className="w-24 h-24 object-cover border border-stone-100"
               />
             ) : (
-              <div className="w-24 h-24 bg-gradient-to-br from-primary to-accent rounded-xl flex items-center justify-center text-white font-bold text-3xl">
+              <div className="w-24 h-24 bg-stone-100 flex items-center justify-center text-stone-500 font-light text-3xl">
                 {job.companyName?.charAt(0) || 'C'}
               </div>
             )}
 
             <div className="flex-1">
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">{job.title}</h1>
-              <div className="flex items-center gap-2 text-lg text-gray-600 mb-4">
-                <Building2 className="w-5 h-5" />
+              <h1 className="font-display font-light text-stone-900 text-3xl mb-2" style={{ letterSpacing: '-0.022em' }}>{job.title}</h1>
+              <div className="flex items-center gap-2 text-stone-400 text-sm mb-4">
+                <Building2 className="w-4 h-4" />
                 {job.companyName}
               </div>
 
@@ -110,18 +110,18 @@ const JobDetail = () => {
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
             <Card>
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Job Description</h2>
-              <div className="prose prose-sm max-w-none text-gray-700 whitespace-pre-wrap">
+              <h2 className="font-light text-stone-900 text-xl mb-4" style={{ letterSpacing: '-0.01em' }}>Job Description</h2>
+              <div className="text-stone-500 text-sm whitespace-pre-wrap leading-relaxed">
                 {job.description}
               </div>
             </Card>
 
             {job.requirements && job.requirements.length > 0 && (
               <Card>
-                <h2 className="text-xl font-bold text-gray-900 mb-4">Requirements</h2>
+                <h2 className="font-light text-stone-900 text-xl mb-4" style={{ letterSpacing: '-0.01em' }}>Requirements</h2>
                 <ul className="space-y-2">
                   {job.requirements.map((req, index) => (
-                    <li key={index} className="flex items-start gap-2 text-gray-700">
+                    <li key={index} className="flex items-start gap-2 text-stone-500 text-sm">
                       <span className="text-accent mt-1">•</span>
                       {req}
                     </li>
@@ -132,7 +132,7 @@ const JobDetail = () => {
 
             {job.requiredSkills && job.requiredSkills.length > 0 && (
               <Card>
-                <h2 className="text-xl font-bold text-gray-900 mb-4">Required Skills</h2>
+                <h2 className="font-light text-stone-900 text-xl mb-4" style={{ letterSpacing: '-0.01em' }}>Required Skills</h2>
                 <div className="flex flex-wrap gap-2">
                   {job.requiredSkills.map((skill, index) => (
                     <Badge key={index} variant="info">
@@ -147,31 +147,31 @@ const JobDetail = () => {
           {/* Sidebar */}
           <div className="space-y-6">
             <Card>
-              <h3 className="font-semibold text-gray-900 mb-4">Job Details</h3>
-              <div className="space-y-3 text-sm">
+              <h3 className="text-[10px] uppercase tracking-label text-stone-400 mb-4">Job Details</h3>
+              <div className="space-y-4 text-sm">
                 <div className="flex items-start gap-3">
-                  <MapPin className="w-5 h-5 text-gray-400 flex-shrink-0" />
+                  <MapPin className="w-4 h-4 text-stone-300 flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="text-gray-500">Location</p>
-                    <p className="font-medium text-gray-900">{job.location}</p>
+                    <p className="text-stone-400 text-xs">Location</p>
+                    <p className="font-light text-stone-900">{job.location}</p>
                     {job.isRemote && <Badge variant="success" className="mt-1">Remote</Badge>}
                   </div>
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <Briefcase className="w-5 h-5 text-gray-400 flex-shrink-0" />
+                  <Briefcase className="w-4 h-4 text-stone-300 flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="text-gray-500">Job Type</p>
-                    <p className="font-medium text-gray-900 capitalize">{job.type}</p>
+                    <p className="text-stone-400 text-xs">Job Type</p>
+                    <p className="font-light text-stone-900 capitalize">{job.type}</p>
                   </div>
                 </div>
 
                 {job.salaryRange && job.salaryRange.min && (
                   <div className="flex items-start gap-3">
-                    <DollarSign className="w-5 h-5 text-gray-400 flex-shrink-0" />
+                    <DollarSign className="w-4 h-4 text-stone-300 flex-shrink-0 mt-0.5" />
                     <div>
-                      <p className="text-gray-500">Salary Range</p>
-                      <p className="font-medium text-gray-900">
+                      <p className="text-stone-400 text-xs">Salary Range</p>
+                      <p className="font-light text-stone-900">
                         {formatCurrency(job.salaryRange.min)} - {formatCurrency(job.salaryRange.max)}
                       </p>
                     </div>
@@ -179,19 +179,19 @@ const JobDetail = () => {
                 )}
 
                 <div className="flex items-start gap-3">
-                  <Calendar className="w-5 h-5 text-gray-400 flex-shrink-0" />
+                  <Calendar className="w-4 h-4 text-stone-300 flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="text-gray-500">Posted</p>
-                    <p className="font-medium text-gray-900">{formatDate(job.createdAt)}</p>
+                    <p className="text-stone-400 text-xs">Posted</p>
+                    <p className="font-light text-stone-900">{formatDate(job.createdAt)}</p>
                   </div>
                 </div>
 
                 {job.applicationDeadline && (
                   <div className="flex items-start gap-3">
-                    <Clock className="w-5 h-5 text-gray-400 flex-shrink-0" />
+                    <Clock className="w-4 h-4 text-stone-300 flex-shrink-0 mt-0.5" />
                     <div>
-                      <p className="text-gray-500">Deadline</p>
-                      <p className="font-medium text-gray-900">{formatDate(job.applicationDeadline)}</p>
+                      <p className="text-stone-400 text-xs">Deadline</p>
+                      <p className="font-light text-stone-900">{formatDate(job.applicationDeadline)}</p>
                     </div>
                   </div>
                 )}
@@ -200,8 +200,8 @@ const JobDetail = () => {
 
             {job.companyDescription && (
               <Card>
-                <h3 className="font-semibold text-gray-900 mb-3">About {job.companyName}</h3>
-                <p className="text-sm text-gray-700">{job.companyDescription}</p>
+                <h3 className="text-[10px] uppercase tracking-label text-stone-400 mb-3">About {job.companyName}</h3>
+                <p className="text-sm text-stone-500">{job.companyDescription}</p>
               </Card>
             )}
 

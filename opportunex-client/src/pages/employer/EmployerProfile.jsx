@@ -23,12 +23,12 @@ import { SECTORS, COMPANY_SIZES } from '@/utils/constants';
 import { useAuth } from '@/context/AuthContext';
 
 const employerSidebarLinks = [
-  { path: '/employer/dashboard', label: 'Dashboard', icon: <LayoutDashboard className="w-5 h-5" /> },
-  { path: '/employer/post-job', label: 'Post a Job', icon: <Briefcase className="w-5 h-5" /> },
-  { path: '/employer/my-postings', label: 'My Postings', icon: <FileText className="w-5 h-5" /> },
-  { path: '/employer/talent-search', label: 'Search Talent', icon: <Users className="w-5 h-5" /> },
-  { path: '/employer/subscription', label: 'Subscription', icon: <CreditCard className="w-5 h-5" /> },
-  { path: '/employer/profile', label: 'Company Profile', icon: <Building2 className="w-5 h-5" /> },
+  { path: '/employer/dashboard', label: 'Dashboard', icon: <LayoutDashboard className="w-4 h-4" /> },
+  { path: '/employer/post-job', label: 'Post a Job', icon: <Briefcase className="w-4 h-4" /> },
+  { path: '/employer/my-postings', label: 'My Postings', icon: <FileText className="w-4 h-4" /> },
+  { path: '/employer/talent-search', label: 'Search Talent', icon: <Users className="w-4 h-4" /> },
+  { path: '/employer/subscription', label: 'Subscription', icon: <CreditCard className="w-4 h-4" /> },
+  { path: '/employer/profile', label: 'Company Profile', icon: <Building2 className="w-4 h-4" /> },
 ];
 
 const EmployerProfile = () => {
@@ -93,9 +93,10 @@ const EmployerProfile = () => {
   return (
     <DashboardLayout sidebarLinks={employerSidebarLinks}>
       <div className="max-w-4xl space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Company Profile</h1>
-          <p className="text-gray-600">Manage your company information</p>
+        <div className="border-b border-stone-100 pb-8 mb-8">
+          <p className="text-[10px] uppercase tracking-luxury text-stone-400 mb-2">Account</p>
+          <h1 className="font-display font-light text-stone-900 text-4xl" style={{ letterSpacing: '-0.022em' }}>Company Profile</h1>
+          <p className="text-stone-400 text-sm mt-2">Manage your company information</p>
         </div>
 
         {/* Company Logo */}
@@ -114,7 +115,6 @@ const EmployerProfile = () => {
               <div>
                 <label htmlFor="logo-upload">
                   <Button variant="primary" disabled={uploading}>
-                    <Upload className="w-4 h-4 mr-2" />
                     Upload Logo
                   </Button>
                   <input
@@ -125,7 +125,7 @@ const EmployerProfile = () => {
                     onChange={handleLogoUpload}
                   />
                 </label>
-                <p className="text-sm text-gray-500 mt-2">
+                <p className="text-sm text-stone-400 mt-2">
                   Recommended: Square image, at least 400x400px
                 </p>
               </div>

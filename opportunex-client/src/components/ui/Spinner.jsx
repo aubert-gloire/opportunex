@@ -1,25 +1,23 @@
 const Spinner = ({ size = 'md', className = '' }) => {
   const sizes = {
-    sm: 'w-4 h-4 border-2',
-    md: 'w-8 h-8 border-2',
-    lg: 'w-12 h-12 border-3',
-    xl: 'w-16 h-16 border-4',
+    sm: 'w-4 h-4 border',
+    md: 'w-7 h-7 border-2',
+    lg: 'w-10 h-10 border-2',
+    xl: 'w-14 h-14 border-2',
   };
 
   return (
     <div
-      className={`${sizes[size]} border-gray-200 border-t-primary rounded-full animate-spin ${className}`}
+      className={`${sizes[size]} border-stone-200 border-t-primary rounded-full animate-spin ${className}`}
     />
   );
 };
 
-export const LoadingScreen = ({ message = 'Loading...' }) => {
-  return (
-    <div className="flex flex-col items-center justify-center min-h-screen">
-      <Spinner size="xl" />
-      <p className="mt-4 text-gray-600">{message}</p>
-    </div>
-  );
-};
+export const LoadingScreen = ({ message = 'Loading...' }) => (
+  <div className="flex flex-col items-center justify-center min-h-screen bg-white">
+    <Spinner size="xl" />
+    <p className="mt-6 text-[11px] uppercase tracking-label text-stone-400">{message}</p>
+  </div>
+);
 
 export default Spinner;

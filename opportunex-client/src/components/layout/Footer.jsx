@@ -1,91 +1,76 @@
 import { Link } from 'react-router-dom';
-import { Facebook, Twitter, Linkedin, Instagram, Mail, Phone, MapPin } from 'lucide-react';
+import { Mail, Phone, MapPin } from 'lucide-react';
 
 const Footer = () => {
+  const col = 'text-[10px] uppercase tracking-luxury text-white/40 font-medium mb-5';
+  const item = 'text-sm text-white/50 hover:text-white/80 transition-colors duration-150';
+
   return (
-    <footer className="bg-primary text-white mt-auto">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+    <footer className="bg-primary mt-auto">
+      <div className="max-w-7xl mx-auto px-6 lg:px-10 py-16">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
+
           {/* Brand */}
-          <div className="col-span-1">
-            <Link to="/" className="flex items-center gap-2 mb-4">
-              <div className="w-10 h-10 bg-gradient-to-br from-accent to-yellow-500 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xl">O</span>
-              </div>
-              <span className="text-xl font-bold">OpportuneX</span>
+          <div className="md:col-span-1">
+            <Link to="/" className="font-display text-2xl italic text-white block mb-4">
+              OpportuneX
             </Link>
-            <p className="text-gray-300 text-sm">
-              Bridging Rwanda's employment-education gap through mentorship, skill verification, and job matching.
+            <p className="text-sm text-white/40 leading-relaxed font-light">
+              Bridging Rwanda's employment–education gap through mentorship, skill verification, and intelligent matching.
             </p>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h4 className="font-semibold mb-4">Quick Links</h4>
-            <ul className="space-y-2 text-sm text-gray-300">
-              <li><Link to="/jobs" className="hover:text-accent transition-colors">Browse Jobs</Link></li>
-              <li><Link to="/about" className="hover:text-accent transition-colors">About Us</Link></li>
-              <li><Link to="/register" className="hover:text-accent transition-colors">Register</Link></li>
-              <li><Link to="/login" className="hover:text-accent transition-colors">Login</Link></li>
+            <p className={col}>Platform</p>
+            <ul className="space-y-3">
+              <li><Link to="/jobs" className={item}>Browse Jobs</Link></li>
+              <li><Link to="/about" className={item}>About Us</Link></li>
+              <li><Link to="/register" className={item}>Register</Link></li>
+              <li><Link to="/login" className={item}>Sign In</Link></li>
             </ul>
           </div>
 
           {/* For Employers */}
           <div>
-            <h4 className="font-semibold mb-4">For Employers</h4>
-            <ul className="space-y-2 text-sm text-gray-300">
-              <li><Link to="/employer/post-job" className="hover:text-accent transition-colors">Post a Job</Link></li>
-              <li><Link to="/employer/talent-search" className="hover:text-accent transition-colors">Search Talent</Link></li>
-              <li><Link to="/employer/pricing" className="hover:text-accent transition-colors">Pricing</Link></li>
+            <p className={col}>For Employers</p>
+            <ul className="space-y-3">
+              <li><Link to="/employer/post-job" className={item}>Post a Job</Link></li>
+              <li><Link to="/employer/talent-search" className={item}>Search Talent</Link></li>
+              <li><Link to="/employer/subscription" className={item}>Pricing</Link></li>
             </ul>
           </div>
 
           {/* Contact */}
           <div>
-            <h4 className="font-semibold mb-4">Contact Us</h4>
-            <ul className="space-y-2 text-sm text-gray-300">
-              <li className="flex items-center gap-2">
-                <Mail className="w-4 h-4" />
-                <a href="mailto:info@opportunex.rw" className="hover:text-accent transition-colors">
-                  info@opportunex.rw
-                </a>
+            <p className={col}>Contact</p>
+            <ul className="space-y-3">
+              <li className="flex items-center gap-2.5">
+                <Mail className="w-3.5 h-3.5 text-white/30 flex-shrink-0" />
+                <a href="mailto:info@opportunex.rw" className={item}>info@opportunex.rw</a>
               </li>
-              <li className="flex items-center gap-2">
-                <Phone className="w-4 h-4" />
-                <span>+250 788 123 456</span>
+              <li className="flex items-center gap-2.5">
+                <Phone className="w-3.5 h-3.5 text-white/30 flex-shrink-0" />
+                <span className="text-sm text-white/50">+250 788 123 456</span>
               </li>
-              <li className="flex items-center gap-2">
-                <MapPin className="w-4 h-4" />
-                <span>Kigali, Rwanda</span>
+              <li className="flex items-center gap-2.5">
+                <MapPin className="w-3.5 h-3.5 text-white/30 flex-shrink-0" />
+                <span className="text-sm text-white/50">Kigali, Rwanda</span>
               </li>
             </ul>
-
-            {/* Social Media */}
-            <div className="flex items-center gap-3 mt-4">
-              <a href="#" className="text-gray-300 hover:text-accent transition-colors">
-                <Facebook className="w-5 h-5" />
-              </a>
-              <a href="#" className="text-gray-300 hover:text-accent transition-colors">
-                <Twitter className="w-5 h-5" />
-              </a>
-              <a href="#" className="text-gray-300 hover:text-accent transition-colors">
-                <Linkedin className="w-5 h-5" />
-              </a>
-              <a href="#" className="text-gray-300 hover:text-accent transition-colors">
-                <Instagram className="w-5 h-5" />
-              </a>
-            </div>
           </div>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="mt-8 pt-8 border-t border-primary-400 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-300">
-          <p>&copy; {new Date().getFullYear()} OpportuneX. All rights reserved.</p>
-          <div className="flex items-center gap-6">
-            <Link to="/privacy" className="hover:text-accent transition-colors">
+        {/* Bottom bar */}
+        <div className="mt-14 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-[10px] uppercase tracking-label text-white/25">
+            &copy; {new Date().getFullYear()} OpportuneX. All rights reserved.
+          </p>
+          <div className="flex items-center gap-8">
+            <Link to="/privacy" className="text-[10px] uppercase tracking-label text-white/25 hover:text-white/50 transition-colors">
               Privacy Policy
             </Link>
-            <Link to="/terms" className="hover:text-accent transition-colors">
+            <Link to="/terms" className="text-[10px] uppercase tracking-label text-white/25 hover:text-white/50 transition-colors">
               Terms of Service
             </Link>
           </div>

@@ -94,43 +94,36 @@ const TakeTest = () => {
   // Start Screen
   if (!testStarted) {
     return (
-      <div className="min-h-screen bg-gray-50 py-8 px-4">
+      <div className="min-h-screen bg-white py-8 px-4">
         <div className="max-w-3xl mx-auto">
           <Card>
             <div className="text-center mb-6">
-              <div className="w-16 h-16 bg-primary-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <GraduationCap className="w-8 h-8 text-primary" />
-              </div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">{testData.title}</h1>
-              <p className="text-gray-600">{testData.description}</p>
+              <h1 className="font-display font-light text-stone-900 text-3xl mb-2" style={{ letterSpacing: '-0.022em' }}>{testData.title}</h1>
+              <p className="text-stone-400 text-sm">{testData.description}</p>
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-              <div className="text-center p-4 bg-gray-50 rounded-lg">
-                <FileText className="w-6 h-6 text-primary mx-auto mb-2" />
-                <p className="text-2xl font-bold text-gray-900">{testData.questions.length}</p>
-                <p className="text-sm text-gray-600">Questions</p>
+              <div className="text-center p-4 bg-stone-50 border border-stone-100">
+                <p className="font-display font-light text-stone-900 text-2xl">{testData.questions.length}</p>
+                <p className="text-sm text-stone-400">Questions</p>
               </div>
-              <div className="text-center p-4 bg-gray-50 rounded-lg">
-                <Clock className="w-6 h-6 text-primary mx-auto mb-2" />
-                <p className="text-2xl font-bold text-gray-900">{testData.duration}</p>
-                <p className="text-sm text-gray-600">Minutes</p>
+              <div className="text-center p-4 bg-stone-50 border border-stone-100">
+                <p className="font-display font-light text-stone-900 text-2xl">{testData.duration}</p>
+                <p className="text-sm text-stone-400">Minutes</p>
               </div>
-              <div className="text-center p-4 bg-gray-50 rounded-lg">
-                <TrendingUp className="w-6 h-6 text-primary mx-auto mb-2" />
-                <p className="text-2xl font-bold text-gray-900">{testData.passingScore}%</p>
-                <p className="text-sm text-gray-600">To Pass</p>
+              <div className="text-center p-4 bg-stone-50 border border-stone-100">
+                <p className="font-display font-light text-stone-900 text-2xl">{testData.passingScore}%</p>
+                <p className="text-sm text-stone-400">To Pass</p>
               </div>
-              <div className="text-center p-4 bg-gray-50 rounded-lg">
-                <Award className="w-6 h-6 text-primary mx-auto mb-2" />
-                <p className="text-2xl font-bold text-gray-900 capitalize">{testData.difficulty}</p>
-                <p className="text-sm text-gray-600">Level</p>
+              <div className="text-center p-4 bg-stone-50 border border-stone-100">
+                <p className="font-display font-light text-stone-900 text-2xl capitalize">{testData.difficulty}</p>
+                <p className="text-sm text-stone-400">Level</p>
               </div>
             </div>
 
-            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
-              <h4 className="font-semibold text-gray-900 mb-2">Before you start:</h4>
-              <ul className="space-y-1 text-sm text-gray-700">
+            <div className="bg-stone-50 border border-stone-100 p-4 mb-6">
+              <h4 className="font-light text-stone-900 mb-2" style={{ letterSpacing: '-0.01em' }}>Before you start:</h4>
+              <ul className="space-y-1 text-sm text-stone-500">
                 <li>• You have {testData.duration} minutes to complete the test</li>
                 <li>• All questions must be answered</li>
                 <li>• You can navigate between questions</li>
@@ -158,24 +151,24 @@ const TakeTest = () => {
   const progress = ((currentQuestion + 1) / testData.questions.length) * 100;
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4">
+    <div className="min-h-screen bg-white py-8 px-4">
       <div className="max-w-4xl mx-auto">
         {/* Timer and Progress */}
         <div className="mb-6">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm font-medium text-gray-700">
+            <span className="text-[10px] uppercase tracking-label text-stone-400">
               Question {currentQuestion + 1} of {testData.questions.length}
             </span>
-            <div className="flex items-center gap-2 text-sm font-medium">
+            <div className="flex items-center gap-2 text-sm font-light">
               <Clock className="w-4 h-4 text-primary" />
               <span className={timeRemaining < 60 ? 'text-red-600' : 'text-primary'}>
                 {formatTime(timeRemaining)}
               </span>
             </div>
           </div>
-          <div className="w-full bg-gray-200 rounded-full h-2">
+          <div className="w-full bg-stone-100 h-0.5">
             <div
-              className="bg-primary h-2 rounded-full transition-all duration-300"
+              className="bg-primary h-0.5 transition-all duration-300"
               style={{ width: `${progress}%` }}
             />
           </div>
@@ -183,7 +176,7 @@ const TakeTest = () => {
 
         {/* Question Card */}
         <Card>
-          <h2 className="text-xl font-semibold text-gray-900 mb-6">
+          <h2 className="font-light text-stone-900 text-xl mb-6" style={{ letterSpacing: '-0.01em' }}>
             {question.question}
           </h2>
 
@@ -192,23 +185,23 @@ const TakeTest = () => {
               <button
                 key={index}
                 onClick={() => handleAnswerSelect(index)}
-                className={`w-full text-left p-4 rounded-lg border-2 transition-all ${answers[currentQuestion] === index
-                    ? 'border-primary bg-primary-50'
-                    : 'border-gray-200 hover:border-primary-200 bg-white'
+                className={`w-full text-left p-4 border transition-all ${answers[currentQuestion] === index
+                    ? 'border-primary bg-primary/5'
+                    : 'border-stone-100 hover:border-stone-200 bg-white'
                   }`}
               >
                 <div className="flex items-center gap-3">
                   <div
-                    className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${answers[currentQuestion] === index
+                    className={`w-5 h-5 border-2 flex items-center justify-center flex-shrink-0 ${answers[currentQuestion] === index
                         ? 'border-primary bg-primary'
-                        : 'border-gray-300'
+                        : 'border-stone-300'
                       }`}
                   >
                     {answers[currentQuestion] === index && (
-                      <CheckCircle className="w-4 h-4 text-white" />
+                      <CheckCircle className="w-3 h-3 text-white" />
                     )}
                   </div>
-                  <span className="text-gray-900">{option}</span>
+                  <span className="text-stone-700 font-light">{option}</span>
                 </div>
               </button>
             ))}
@@ -255,11 +248,11 @@ const TakeTest = () => {
               <button
                 key={index}
                 onClick={() => setCurrentQuestion(index)}
-                className={`w-10 h-10 rounded-lg font-medium transition-all ${index === currentQuestion
+                className={`w-10 h-10 font-light text-sm transition-all ${index === currentQuestion
                     ? 'bg-primary text-white'
                     : answers[index] !== null
                       ? 'bg-green-100 text-green-800'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      : 'bg-stone-100 text-stone-500 hover:bg-stone-200'
                   }`}
               >
                 {index + 1}
@@ -281,31 +274,31 @@ const TakeTest = () => {
       >
         {testResults && (
           <div className="text-center space-y-6">
-            <div className={`w-24 h-24 rounded-full mx-auto flex items-center justify-center ${testResults.passed ? 'bg-green-100' : 'bg-gray-100'
+            <div className={`w-24 h-24 mx-auto flex items-center justify-center ${testResults.passed ? 'bg-green-100' : 'bg-stone-100'
               }`}>
-              <Award className={`w-12 h-12 ${testResults.passed ? 'text-green-600' : 'text-gray-400'}`} />
+              <Award className={`w-12 h-12 ${testResults.passed ? 'text-green-600' : 'text-stone-400'}`} />
             </div>
 
             <div>
-              <h3 className="text-3xl font-bold text-gray-900 mb-2">
+              <h3 className="font-display font-light text-stone-900 text-3xl mb-2" style={{ letterSpacing: '-0.022em' }}>
                 {testResults.percentage}%
               </h3>
-              <p className="text-gray-600">
+              <p className="text-stone-400 text-sm">
                 {testResults.correctAnswers} out of {testResults.totalQuestions} correct
               </p>
             </div>
 
             {testResults.passed ? (
-              <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                <p className="text-green-900 font-semibold mb-2">You passed the test!</p>
+              <div className="bg-green-50 border border-green-200 p-4">
+                <p className="text-green-900 font-light mb-2">You passed the test!</p>
                 <p className="text-green-700 text-sm">
                   A {testResults.badge} badge has been added to your profile
                 </p>
               </div>
             ) : (
-              <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
-                <p className="text-gray-900 font-semibold mb-2">Keep practicing!</p>
-                <p className="text-gray-700 text-sm">
+              <div className="bg-stone-50 border border-stone-100 p-4">
+                <p className="text-stone-900 font-light mb-2">Keep practicing!</p>
+                <p className="text-stone-400 text-sm">
                   You can retake this test after 7 days
                 </p>
               </div>

@@ -12,9 +12,9 @@ import EmptyState from '@/components/ui/EmptyState';
 import { formatDuration, formatDate } from '@/utils/helpers';
 
 const youthSidebarLinks = [
-  { path: '/youth/dashboard', label: 'Dashboard', icon: <BookOpen className="w-5 h-5" /> },
-  { path: '/youth/courses', label: 'Courses', icon: <BookOpen className="w-5 h-5" /> },
-  { path: '/youth/my-courses', label: 'My Courses', icon: <BookOpen className="w-5 h-5" /> },
+  { path: '/youth/dashboard', label: 'Dashboard', icon: <BookOpen className="w-4 h-4" /> },
+  { path: '/youth/courses', label: 'Courses', icon: <BookOpen className="w-4 h-4" /> },
+  { path: '/youth/my-courses', label: 'My Courses', icon: <BookOpen className="w-4 h-4" /> },
 ];
 
 const MyCourses = () => {
@@ -49,16 +49,16 @@ const MyCourses = () => {
     <DashboardLayout sidebarLinks={youthSidebarLinks}>
       <div className="space-y-6">
         <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">My Courses</h1>
-            <p className="text-gray-600">Track your learning progress</p>
+          <div className="border-b border-stone-100 pb-8 mb-8 flex-1">
+            <p className="text-[10px] uppercase tracking-luxury text-stone-400 mb-2">Learning</p>
+            <h1 className="font-display font-light text-stone-900 text-4xl" style={{ letterSpacing: '-0.022em' }}>My Courses</h1>
+            <p className="text-stone-400 text-sm mt-2">Track your learning progress</p>
           </div>
           <Button
             variant="primary"
             onClick={() => navigate('/youth/courses')}
-            className="flex items-center gap-2"
+            className="ml-4"
           >
-            <BookOpen className="w-5 h-5" />
             Browse Courses
           </Button>
         </div>
@@ -88,7 +88,7 @@ const MyCourses = () => {
             {[...Array(4)].map((_, i) => (
               <Card key={i}>
                 <div className="flex gap-4 p-6">
-                  <Skeleton className="w-24 h-24 rounded-lg" />
+                  <Skeleton className="w-24 h-24" />
                   <div className="flex-1">
                     <Skeleton className="h-6 mb-2 w-3/4" />
                     <Skeleton className="h-4 mb-3 w-full" />
@@ -104,7 +104,7 @@ const MyCourses = () => {
               const course = enrollment.course;
 
               return (
-                <Card key={enrollment._id} className="hover:shadow-lg transition">
+                <Card key={enrollment._id} hover>
                   <CardContent className="pt-6">
                     <div className="flex gap-4">
                       {/* Course Thumbnail */}
@@ -113,11 +113,11 @@ const MyCourses = () => {
                           <img
                             src={course.thumbnail}
                             alt={course.title}
-                            className="w-full h-full object-cover rounded-lg"
+                            className="w-full h-full object-cover"
                           />
                         ) : (
-                          <div className="w-full h-full bg-gradient-to-br from-primary to-primary-dark rounded-lg flex items-center justify-center">
-                            <BookOpen className="w-10 h-10 text-white opacity-70" />
+                          <div className="w-full h-full bg-stone-100 flex items-center justify-center">
+                            <BookOpen className="w-8 h-8 text-stone-300" />
                           </div>
                         )}
                       </div>
@@ -125,31 +125,31 @@ const MyCourses = () => {
                       {/* Course Info */}
                       <div className="flex-1 min-w-0">
                         <div className="flex items-start justify-between mb-2">
-                          <h3 className="text-lg font-semibold text-gray-900 line-clamp-1">
+                          <h3 className="font-light text-stone-900 line-clamp-1" style={{ letterSpacing: '-0.01em' }}>
                             {course.title}
                           </h3>
                           {getStatusBadge(enrollment.status)}
                         </div>
 
-                        <p className="text-sm text-gray-600 mb-3 line-clamp-2">
+                        <p className="text-sm text-stone-400 mb-3 line-clamp-2">
                           {course.description}
                         </p>
 
                         {/* Progress Bar */}
                         <div className="mb-3">
                           <div className="flex items-center justify-between text-sm mb-1">
-                            <span className="text-gray-600">Progress</span>
-                            <span className="font-medium text-primary">
+                            <span className="text-stone-400 text-xs">Progress</span>
+                            <span className="font-light text-primary text-xs">
                               {enrollment.progress}%
                             </span>
                           </div>
-                          <div className="w-full bg-gray-200 rounded-full h-2">
+                          <div className="w-full bg-stone-100 h-0.5">
                             <div
-                              className="bg-primary h-2 rounded-full transition-all"
+                              className="bg-primary h-0.5 transition-all"
                               style={{ width: `${enrollment.progress}%` }}
                             />
                           </div>
-                          <p className="text-xs text-gray-500 mt-1">
+                          <p className="text-xs text-stone-400 mt-1">
                             {enrollment.completedLessons.length} of {course.lessons.length} lessons completed
                           </p>
                         </div>
@@ -162,9 +162,7 @@ const MyCourses = () => {
                                 variant="primary"
                                 size="sm"
                                 onClick={() => navigate(`/youth/courses/${course._id}/learn`)}
-                                className="flex items-center gap-1"
                               >
-                                <PlayCircle className="w-4 h-4" />
                                 Review Course
                               </Button>
                               {enrollment.certificateUrl && (
@@ -172,9 +170,7 @@ const MyCourses = () => {
                                   variant="accent"
                                   size="sm"
                                   onClick={() => window.open(enrollment.certificateUrl, '_blank')}
-                                  className="flex items-center gap-1"
                                 >
-                                  <Award className="w-4 h-4" />
                                   Certificate
                                 </Button>
                               )}
@@ -184,9 +180,7 @@ const MyCourses = () => {
                               variant="primary"
                               size="sm"
                               onClick={() => navigate(`/youth/courses/${course._id}/learn`)}
-                              className="flex items-center gap-1"
                             >
-                              <PlayCircle className="w-4 h-4" />
                               {enrollment.progress > 0 ? 'Continue' : 'Start Course'}
                             </Button>
                           )}
@@ -195,7 +189,7 @@ const MyCourses = () => {
                     </div>
 
                     {/* Footer Stats */}
-                    <div className="flex items-center gap-4 mt-4 pt-4 border-t text-sm text-gray-600">
+                    <div className="flex items-center gap-4 mt-4 pt-4 border-t border-stone-50 text-sm text-stone-400">
                       <span>Enrolled {formatDate(enrollment.enrolledAt)}</span>
                       {enrollment.completedAt && (
                         <span className="flex items-center gap-1 text-green-600">

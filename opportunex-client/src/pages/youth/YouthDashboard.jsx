@@ -1,17 +1,7 @@
-import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  LayoutDashboard,
-  Briefcase,
-  FileText,
-  Users,
-  GraduationCap,
-  User,
-  TrendingUp,
-  CheckCircle,
-  Clock,
-  BookOpen,
-  PlayCircle,
+  LayoutDashboard, Briefcase, FileText, Users,
+  GraduationCap, User, BookOpen, PlayCircle, Clock,
 } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { userAPI, jobAPI, applicationAPI, mentorshipAPI, courseAPI } from '@/api';
@@ -23,14 +13,14 @@ import { formatDate, statusColors } from '@/utils/helpers';
 import { useAuth } from '@/context/AuthContext';
 
 const youthSidebarLinks = [
-  { path: '/youth/dashboard', label: 'Dashboard', icon: <LayoutDashboard className="w-5 h-5" /> },
-  { path: '/youth/jobs', label: 'Find Jobs', icon: <Briefcase className="w-5 h-5" /> },
-  { path: '/youth/applications', label: 'My Applications', icon: <FileText className="w-5 h-5" /> },
-  { path: '/youth/courses', label: 'Courses', icon: <BookOpen className="w-5 h-5" /> },
-  { path: '/youth/my-courses', label: 'My Courses', icon: <BookOpen className="w-5 h-5" /> },
-  { path: '/youth/mentorship', label: 'Mentorship', icon: <Users className="w-5 h-5" /> },
-  { path: '/youth/skill-tests', label: 'Skill Tests', icon: <GraduationCap className="w-5 h-5" /> },
-  { path: '/youth/profile', label: 'My Profile', icon: <User className="w-5 h-5" /> },
+  { path: '/youth/dashboard',   label: 'Dashboard',       icon: <LayoutDashboard className="w-4 h-4" /> },
+  { path: '/youth/jobs',        label: 'Find Jobs',        icon: <Briefcase className="w-4 h-4" /> },
+  { path: '/youth/applications',label: 'Applications',     icon: <FileText className="w-4 h-4" /> },
+  { path: '/youth/courses',     label: 'Courses',          icon: <BookOpen className="w-4 h-4" /> },
+  { path: '/youth/my-courses',  label: 'My Courses',       icon: <BookOpen className="w-4 h-4" /> },
+  { path: '/youth/mentorship',  label: 'Mentorship',       icon: <Users className="w-4 h-4" /> },
+  { path: '/youth/skill-tests', label: 'Skill Tests',      icon: <GraduationCap className="w-4 h-4" /> },
+  { path: '/youth/profile',     label: 'My Profile',       icon: <User className="w-4 h-4" /> },
 ];
 
 const YouthDashboard = () => {
@@ -38,379 +28,250 @@ const YouthDashboard = () => {
 
   const { data: profileData } = useQuery({
     queryKey: ['profile'],
-    queryFn: async () => {
-      const response = await userAPI.getProfile();
-      return response.data;
-    },
+    queryFn: async () => (await userAPI.getProfile()).data,
   });
 
   const { data: recommendedJobs } = useQuery({
     queryKey: ['recommendedJobs'],
-    queryFn: async () => {
-      const response = await jobAPI.getRecommendedJobs();
-      return response.data.jobs.slice(0, 5);
-    },
+    queryFn: async () => (await jobAPI.getRecommendedJobs()).data.jobs.slice(0, 5),
   });
 
   const { data: recentApplications } = useQuery({
     queryKey: ['recentApplications'],
-    queryFn: async () => {
-      const response = await applicationAPI.getMyApplications({ limit: 5 });
-      return response.data.applications;
-    },
+    queryFn: async () => (await applicationAPI.getMyApplications({ limit: 5 })).data.applications,
   });
 
   const { data: upcomingSessions } = useQuery({
     queryKey: ['upcomingSessions'],
-    queryFn: async () => {
-      const response = await mentorshipAPI.getMySessions({
-        role: 'mentee',
-        status: 'confirmed',
-      });
-      return response.data.sessions.slice(0, 3);
-    },
+    queryFn: async () => (await mentorshipAPI.getMySessions({ role: 'mentee', status: 'confirmed' })).data.sessions.slice(0, 3),
   });
 
   const { data: myCourses } = useQuery({
     queryKey: ['my-courses'],
-    queryFn: async () => {
-      const response = await courseAPI.getMyCourses();
-      return response.data.enrollments.slice(0, 3);
-    },
+    queryFn: async () => (await courseAPI.getMyCourses()).data.enrollments.slice(0, 3),
   });
 
   const { data: recommendedCourses } = useQuery({
     queryKey: ['recommended-courses'],
-    queryFn: async () => {
-      const response = await courseAPI.getRecommendedCourses();
-      return response.data.courses.slice(0, 3);
-    },
+    queryFn: async () => (await courseAPI.getRecommendedCourses()).data.courses.slice(0, 3),
   });
 
   const profile = profileData?.profile;
   const completionPercentage = profile?.profileCompletionPercentage || 0;
 
+  const stats = [
+    { label: 'Profile',          value: `${completionPercentage}%`,              sub: 'completion'          },
+    { label: 'Applications',     value: recentApplications?.length || 0,         sub: 'submitted'           },
+    { label: 'Verified Skills',  value: profile?.verifiedSkills?.length || 0,    sub: 'certified'           },
+    { label: 'Sessions',         value: upcomingSessions?.length || 0,            sub: 'upcoming'            },
+  ];
+
   return (
     <DashboardLayout sidebarLinks={youthSidebarLinks}>
-      <div className="space-y-6">
-        {/* Welcome Header */}
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Welcome back, {user?.firstName}!
+      <div className="space-y-8">
+
+        {/* Header */}
+        <div className="border-b border-stone-100 pb-8">
+          <p className="text-[10px] uppercase tracking-luxury text-stone-400 mb-2">Dashboard</p>
+          <h1 className="font-display font-light text-stone-900 text-4xl" style={{ letterSpacing: '-0.022em' }}>
+            Welcome back, <em>{user?.firstName}</em>
           </h1>
-          <p className="text-gray-600">Here's what's happening with your job search</p>
+          <p className="text-stone-400 text-sm mt-2">Here's what's happening with your career search.</p>
         </div>
 
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <Card className="bg-gradient-to-br from-primary to-primary-600 text-white">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-gray-100 text-sm mb-1">Profile Completion</p>
-                <p className="text-3xl font-bold">{completionPercentage}%</p>
-              </div>
-              <TrendingUp className="w-8 h-8 opacity-80" />
+        {/* Stats */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-0 border border-stone-100 divide-x divide-y md:divide-y-0 divide-stone-100">
+          {stats.map(({ label, value, sub }) => (
+            <div key={label} className="p-6">
+              <div className="font-display text-3xl font-light text-stone-900" style={{ letterSpacing: '-0.02em' }}>{value}</div>
+              <div className="text-[10px] uppercase tracking-label text-stone-400 mt-1">{label}</div>
+              <div className="text-[10px] text-stone-300 mt-0.5">{sub}</div>
             </div>
-          </Card>
-
-          <Card>
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-gray-600 text-sm mb-1">Applications</p>
-                <p className="text-3xl font-bold text-gray-900">
-                  {recentApplications?.length || 0}
-                </p>
-              </div>
-              <FileText className="w-8 h-8 text-primary" />
-            </div>
-          </Card>
-
-          <Card>
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-gray-600 text-sm mb-1">Verified Skills</p>
-                <p className="text-3xl font-bold text-gray-900">
-                  {profile?.verifiedSkills?.length || 0}
-                </p>
-              </div>
-              <CheckCircle className="w-8 h-8 text-green-600" />
-            </div>
-          </Card>
-
-          <Card>
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-gray-600 text-sm mb-1">Mentorship Sessions</p>
-                <p className="text-3xl font-bold text-gray-900">
-                  {upcomingSessions?.length || 0}
-                </p>
-              </div>
-              <Users className="w-8 h-8 text-accent" />
-            </div>
-          </Card>
+          ))}
         </div>
 
-        {/* Profile Completion Alert */}
+        {/* Profile completion nudge */}
         {completionPercentage < 80 && (
-          <Card className="bg-accent-50 border-accent-200">
-            <div className="flex items-start gap-4">
-              <TrendingUp className="w-6 h-6 text-accent flex-shrink-0 mt-1" />
-              <div className="flex-1">
-                <h3 className="font-semibold text-gray-900 mb-1">
-                  Complete Your Profile ({completionPercentage}%)
-                </h3>
-                <p className="text-gray-700 text-sm mb-3">
-                  Profiles with higher completion get 3x more employer views
-                </p>
-                <Link to="/youth/profile">
-                  <Button variant="accent" size="sm">
-                    Complete Profile
-                  </Button>
-                </Link>
-              </div>
+          <div className="border-l-2 border-accent pl-5 py-1 flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-stone-900">Complete your profile ({completionPercentage}%)</p>
+              <p className="text-xs text-stone-400 mt-0.5">Profiles with higher completion get 3× more employer views</p>
             </div>
-          </Card>
+            <Link to="/youth/profile">
+              <Button variant="outline" size="sm">Complete</Button>
+            </Link>
+          </div>
         )}
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
           {/* Recommended Jobs */}
-          <Card>
-            <CardHeader>
+          <Card padding={false}>
+            <CardHeader className="px-6 pt-6 pb-4 border-b border-stone-100">
               <CardTitle>Recommended Jobs</CardTitle>
             </CardHeader>
             <CardContent>
               {recommendedJobs && recommendedJobs.length > 0 ? (
-                <div className="space-y-3">
+                <div>
                   {recommendedJobs.map((job) => (
                     <Link
                       key={job._id}
                       to={`/jobs/${job._id}`}
-                      className="block p-3 border border-gray-200 rounded-lg hover:border-primary hover:shadow-sm transition-all"
+                      className="flex items-start justify-between px-6 py-4 border-b border-stone-50 hover:bg-stone-50 transition-colors"
                     >
-                      <h4 className="font-semibold text-gray-900 mb-1">{job.title}</h4>
-                      <p className="text-sm text-gray-600 mb-2">{job.companyName}</p>
-                      <div className="flex items-center gap-2">
-                        <Badge variant="primary" className="text-xs">{job.type}</Badge>
-                        <Badge variant="gray" className="text-xs">{job.location}</Badge>
+                      <div>
+                        <p className="text-sm font-medium text-stone-900">{job.title}</p>
+                        <p className="text-xs text-stone-400 mt-0.5">{job.companyName}</p>
+                      </div>
+                      <div className="flex gap-2 flex-shrink-0 ml-4">
+                        <Badge variant="primary">{job.type}</Badge>
                       </div>
                     </Link>
                   ))}
-                  <Link to="/youth/jobs">
-                    <Button variant="ghost" className="w-full">
-                      View All Jobs
-                    </Button>
-                  </Link>
+                  <div className="px-6 py-4">
+                    <Link to="/youth/jobs">
+                      <Button variant="ghost" size="sm">View all jobs</Button>
+                    </Link>
+                  </div>
                 </div>
               ) : (
-                <p className="text-gray-500 text-sm text-center py-8">
-                  Complete your profile to get personalized recommendations
+                <p className="text-sm text-stone-400 text-center py-10 px-6">
+                  Complete your profile to get personalised recommendations.
                 </p>
               )}
             </CardContent>
           </Card>
 
           {/* Recent Applications */}
-          <Card>
-            <CardHeader>
+          <Card padding={false}>
+            <CardHeader className="px-6 pt-6 pb-4 border-b border-stone-100">
               <CardTitle>Recent Applications</CardTitle>
             </CardHeader>
             <CardContent>
               {recentApplications && recentApplications.length > 0 ? (
-                <div className="space-y-3">
+                <div>
                   {recentApplications.map((app) => (
-                    <div
-                      key={app._id}
-                      className="p-3 border border-gray-200 rounded-lg"
-                    >
-                      <h4 className="font-semibold text-gray-900 mb-1">{app.job.title}</h4>
-                      <p className="text-sm text-gray-600 mb-2">
-                        Applied {formatDate(app.createdAt)}
-                      </p>
-                      <Badge variant="gray" className={statusColors[app.status]}>
-                        {app.status}
-                      </Badge>
+                    <div key={app._id} className="flex items-start justify-between px-6 py-4 border-b border-stone-50">
+                      <div>
+                        <p className="text-sm font-medium text-stone-900">{app.job.title}</p>
+                        <p className="text-xs text-stone-400 mt-0.5">{formatDate(app.createdAt)}</p>
+                      </div>
+                      <Badge variant="gray" className={statusColors[app.status]}>{app.status}</Badge>
                     </div>
                   ))}
-                  <Link to="/youth/applications">
-                    <Button variant="ghost" className="w-full">
-                      View All Applications
-                    </Button>
-                  </Link>
+                  <div className="px-6 py-4">
+                    <Link to="/youth/applications">
+                      <Button variant="ghost" size="sm">View all applications</Button>
+                    </Link>
+                  </div>
                 </div>
               ) : (
-                <p className="text-gray-500 text-sm text-center py-8">
-                  No applications yet. Start applying to jobs!
-                </p>
+                <p className="text-sm text-stone-400 text-center py-10 px-6">No applications yet.</p>
               )}
             </CardContent>
           </Card>
         </div>
 
-        {/* My Courses / Recommended Courses */}
-        <Card>
-          <CardHeader>
+        {/* Courses */}
+        <Card padding={false}>
+          <CardHeader className="px-6 pt-6 pb-4 border-b border-stone-100">
             <CardTitle>{myCourses && myCourses.length > 0 ? 'Continue Learning' : 'Recommended Courses'}</CardTitle>
           </CardHeader>
           <CardContent>
             {myCourses && myCourses.length > 0 ? (
-              <div className="space-y-3">
+              <div>
                 {myCourses.map((enrollment) => {
                   const course = enrollment.course;
                   return (
                     <Link
                       key={enrollment._id}
                       to={`/youth/courses/${course._id}/learn`}
-                      className="flex items-center gap-4 p-3 border border-gray-200 rounded-lg hover:border-primary hover:shadow-sm transition-all"
+                      className="flex items-center gap-4 px-6 py-4 border-b border-stone-50 hover:bg-stone-50 transition-colors"
                     >
-                      <div className="w-16 h-16 flex-shrink-0">
-                        {course.thumbnail ? (
-                          <img
-                            src={course.thumbnail}
-                            alt={course.title}
-                            className="w-full h-full object-cover rounded-lg"
-                          />
-                        ) : (
-                          <div className="w-full h-full bg-gradient-to-br from-primary to-primary-dark rounded-lg flex items-center justify-center">
-                            <BookOpen className="w-8 h-8 text-white opacity-70" />
-                          </div>
-                        )}
-                      </div>
                       <div className="flex-1 min-w-0">
-                        <h4 className="font-semibold text-gray-900 mb-1">{course.title}</h4>
-                        <div className="flex items-center gap-2 mb-2">
-                          <span className="text-xs text-gray-600">{enrollment.progress}% complete</span>
-                          <div className="flex-1 bg-gray-200 rounded-full h-1.5 max-w-[120px]">
-                            <div
-                              className="bg-primary h-1.5 rounded-full"
-                              style={{ width: `${enrollment.progress}%` }}
-                            />
+                        <p className="text-sm font-medium text-stone-900 truncate">{course.title}</p>
+                        <div className="flex items-center gap-3 mt-2">
+                          <div className="flex-1 max-w-[120px] bg-stone-100 h-0.5">
+                            <div className="bg-primary h-0.5" style={{ width: `${enrollment.progress}%` }} />
                           </div>
+                          <span className="text-xs text-stone-400">{enrollment.progress}%</span>
                         </div>
-                        <Badge variant="primary" className="text-xs">{course.category}</Badge>
                       </div>
-                      <PlayCircle className="w-6 h-6 text-primary flex-shrink-0" />
+                      <PlayCircle className="w-4 h-4 text-stone-300 flex-shrink-0" />
                     </Link>
                   );
                 })}
-                <Link to="/youth/my-courses">
-                  <Button variant="ghost" className="w-full">
-                    View All My Courses
-                  </Button>
-                </Link>
+                <div className="px-6 py-4">
+                  <Link to="/youth/my-courses"><Button variant="ghost" size="sm">View all courses</Button></Link>
+                </div>
               </div>
             ) : recommendedCourses && recommendedCourses.length > 0 ? (
-              <div className="space-y-3">
+              <div>
                 {recommendedCourses.map((course) => (
                   <Link
                     key={course._id}
                     to={`/youth/courses/${course._id}`}
-                    className="flex items-center gap-4 p-3 border border-gray-200 rounded-lg hover:border-primary hover:shadow-sm transition-all"
+                    className="flex items-center justify-between px-6 py-4 border-b border-stone-50 hover:bg-stone-50 transition-colors"
                   >
-                    <div className="w-16 h-16 flex-shrink-0">
-                      {course.thumbnail ? (
-                        <img
-                          src={course.thumbnail}
-                          alt={course.title}
-                          className="w-full h-full object-cover rounded-lg"
-                        />
-                      ) : (
-                        <div className="w-full h-full bg-gradient-to-br from-primary to-primary-dark rounded-lg flex items-center justify-center">
-                          <BookOpen className="w-8 h-8 text-white opacity-70" />
-                        </div>
-                      )}
+                    <div>
+                      <p className="text-sm font-medium text-stone-900">{course.title}</p>
+                      <p className="text-xs text-stone-400 mt-0.5">{course.lessons.length} lessons</p>
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <h4 className="font-semibold text-gray-900 mb-1">{course.title}</h4>
-                      <p className="text-xs text-gray-600 mb-2">{course.lessons.length} lessons</p>
-                      <div className="flex items-center gap-2">
-                        <Badge variant="primary" className="text-xs">{course.category}</Badge>
-                        {course.price === 0 && <Badge variant="success" className="text-xs">Free</Badge>}
-                      </div>
+                    <div className="flex gap-2">
+                      <Badge variant="primary">{course.category}</Badge>
+                      {course.price === 0 && <Badge variant="success">Free</Badge>}
                     </div>
                   </Link>
                 ))}
-                <Link to="/youth/courses">
-                  <Button variant="ghost" className="w-full">
-                    Browse All Courses
-                  </Button>
-                </Link>
+                <div className="px-6 py-4">
+                  <Link to="/youth/courses"><Button variant="ghost" size="sm">Browse all courses</Button></Link>
+                </div>
               </div>
             ) : (
-              <p className="text-gray-500 text-sm text-center py-8">
-                No courses available yet
-              </p>
+              <p className="text-sm text-stone-400 text-center py-10 px-6">No courses available yet.</p>
             )}
           </CardContent>
         </Card>
 
-        {/* Upcoming Mentorship Sessions */}
+        {/* Mentorship sessions */}
         {upcomingSessions && upcomingSessions.length > 0 && (
-          <Card>
-            <CardHeader>
+          <Card padding={false}>
+            <CardHeader className="px-6 pt-6 pb-4 border-b border-stone-100">
               <CardTitle>Upcoming Mentorship Sessions</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-3">
-                {upcomingSessions.map((session) => (
-                  <div
-                    key={session._id}
-                    className="flex items-center gap-4 p-3 border border-gray-200 rounded-lg"
-                  >
-                    <div className="w-12 h-12 bg-accent-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <Users className="w-6 h-6 text-accent" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <h4 className="font-semibold text-gray-900">{session.topic}</h4>
-                      <p className="text-sm text-gray-600">
-                        with {session.mentor.firstName} {session.mentor.lastName}
-                      </p>
-                      <p className="text-xs text-gray-500 flex items-center gap-1 mt-1">
-                        <Clock className="w-3 h-3" />
-                        {formatDate(session.scheduledAt)}
-                      </p>
-                    </div>
-                    <Badge variant="success">{session.status}</Badge>
+              {upcomingSessions.map((session) => (
+                <div key={session._id} className="flex items-start justify-between px-6 py-4 border-b border-stone-50">
+                  <div>
+                    <p className="text-sm font-medium text-stone-900">{session.topic}</p>
+                    <p className="text-xs text-stone-400 mt-0.5">
+                      with {session.mentor.firstName} {session.mentor.lastName}
+                    </p>
+                    <p className="text-xs text-stone-300 flex items-center gap-1 mt-1">
+                      <Clock className="w-3 h-3" />{formatDate(session.scheduledAt)}
+                    </p>
                   </div>
-                ))}
-              </div>
+                  <Badge variant="success">{session.status}</Badge>
+                </div>
+              ))}
             </CardContent>
           </Card>
         )}
 
-        {/* Quick Actions */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Quick Actions</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <Link to="/youth/jobs">
-                <Button variant="outline" className="w-full">
-                  <Briefcase className="w-4 h-4 mr-2" />
-                  Find Jobs
-                </Button>
-              </Link>
-              <Link to="/youth/courses">
-                <Button variant="outline" className="w-full">
-                  <BookOpen className="w-4 h-4 mr-2" />
-                  Courses
-                </Button>
-              </Link>
-              <Link to="/youth/skill-tests">
-                <Button variant="outline" className="w-full">
-                  <GraduationCap className="w-4 h-4 mr-2" />
-                  Take Tests
-                </Button>
-              </Link>
-              <Link to="/youth/mentorship">
-                <Button variant="outline" className="w-full">
-                  <Users className="w-4 h-4 mr-2" />
-                  Find Mentor
-                </Button>
-              </Link>
-            </div>
-          </CardContent>
-        </Card>
+        {/* Quick actions */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          {[
+            { to: '/youth/jobs',        label: 'Find Jobs'     },
+            { to: '/youth/courses',     label: 'Courses'       },
+            { to: '/youth/skill-tests', label: 'Skill Tests'   },
+            { to: '/youth/mentorship',  label: 'Find Mentor'   },
+          ].map(({ to, label }) => (
+            <Link key={to} to={to}>
+              <Button variant="outline" className="w-full">{label}</Button>
+            </Link>
+          ))}
+        </div>
+
       </div>
     </DashboardLayout>
   );

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, MapPin, Briefcase, Filter } from 'lucide-react';
+import { Search, MapPin, Briefcase } from 'lucide-react';
 import { jobAPI } from '@/api';
 import Card, { CardContent } from '@/components/ui/Card';
 import Input from '@/components/ui/Input';
@@ -44,14 +44,15 @@ const JobsPublic = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-white py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-primary mb-2">
+        <div className="border-b border-stone-100 pb-8 mb-8">
+          <p className="text-[10px] uppercase tracking-luxury text-stone-400 mb-2">Opportunities</p>
+          <h1 className="font-display font-light text-stone-900 text-4xl md:text-5xl" style={{ letterSpacing: '-0.022em' }}>
             Browse Job Opportunities
           </h1>
-          <p className="text-gray-600">
+          <p className="text-stone-400 text-sm mt-2">
             Discover opportunities from verified employers across Rwanda
           </p>
         </div>
@@ -88,7 +89,6 @@ const JobsPublic = () => {
                 className="flex-1"
               />
               <Button type="submit" variant="primary">
-                <Search className="w-4 h-4 mr-2" />
                 Search
               </Button>
             </div>
@@ -110,12 +110,12 @@ const JobsPublic = () => {
           />
         ) : (
           <div className="space-y-4">
-            <div className="text-sm text-gray-600 mb-4">
+            <div className="text-sm text-stone-400 mb-4">
               Showing {jobs.length} opportunities
             </div>
             {jobs.map((job) => (
               <Link key={job._id} to={`/jobs/${job._id}`}>
-                <Card hover className="hover:border-primary transition-all">
+                <Card hover className="hover:border-stone-200 transition-all">
                   <div className="flex gap-4">
                     {/* Company Logo */}
                     <div className="flex-shrink-0">
@@ -123,10 +123,10 @@ const JobsPublic = () => {
                         <img
                           src={job.companyLogo}
                           alt={job.companyName}
-                          className="w-16 h-16 object-cover rounded-lg border border-gray-200"
+                          className="w-16 h-16 object-cover border border-stone-100"
                         />
                       ) : (
-                        <div className="w-16 h-16 bg-gradient-to-br from-primary to-accent rounded-lg flex items-center justify-center text-white font-bold text-xl">
+                        <div className="w-16 h-16 bg-stone-100 flex items-center justify-center text-stone-500 font-light text-xl">
                           {job.companyName?.charAt(0) || 'C'}
                         </div>
                       )}
@@ -134,10 +134,10 @@ const JobsPublic = () => {
 
                     {/* Job Info */}
                     <div className="flex-1 min-w-0">
-                      <h3 className="text-xl font-bold text-gray-900 mb-1 hover:text-primary transition-colors">
+                      <h3 className="font-light text-stone-900 text-xl mb-1 hover:text-primary transition-colors" style={{ letterSpacing: '-0.01em' }}>
                         {job.title}
                       </h3>
-                      <p className="text-gray-600 mb-3">{job.companyName}</p>
+                      <p className="text-stone-400 text-sm mb-3">{job.companyName}</p>
 
                       <div className="flex flex-wrap gap-2 mb-3">
                         <Badge variant="primary">{job.type}</Badge>
@@ -153,7 +153,7 @@ const JobsPublic = () => {
                         {job.isRemote && <Badge variant="success">Remote</Badge>}
                       </div>
 
-                      <div className="flex items-center justify-between text-sm text-gray-500">
+                      <div className="flex items-center justify-between text-sm text-stone-400">
                         <span>{formatDate(job.createdAt)}</span>
                         <span>{job.applicationsCount} applicants</span>
                       </div>

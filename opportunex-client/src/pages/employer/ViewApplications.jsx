@@ -10,9 +10,7 @@ import {
   CreditCard,
   Mail,
   Phone,
-  MapPin,
   ExternalLink,
-  Calendar,
 } from 'lucide-react';
 import { applicationAPI } from '@/api';
 import DashboardLayout from '@/components/layout/DashboardLayout';
@@ -29,12 +27,12 @@ import { APPLICATION_STATUSES } from '@/utils/constants';
 import toast from 'react-hot-toast';
 
 const employerSidebarLinks = [
-  { path: '/employer/dashboard', label: 'Dashboard', icon: <LayoutDashboard className="w-5 h-5" /> },
-  { path: '/employer/post-job', label: 'Post a Job', icon: <Briefcase className="w-5 h-5" /> },
-  { path: '/employer/my-postings', label: 'My Postings', icon: <FileText className="w-5 h-5" /> },
-  { path: '/employer/talent-search', label: 'Search Talent', icon: <Users className="w-5 h-5" /> },
-  { path: '/employer/subscription', label: 'Subscription', icon: <CreditCard className="w-5 h-5" /> },
-  { path: '/employer/profile', label: 'Company Profile', icon: <Building2 className="w-5 h-5" /> },
+  { path: '/employer/dashboard', label: 'Dashboard', icon: <LayoutDashboard className="w-4 h-4" /> },
+  { path: '/employer/post-job', label: 'Post a Job', icon: <Briefcase className="w-4 h-4" /> },
+  { path: '/employer/my-postings', label: 'My Postings', icon: <FileText className="w-4 h-4" /> },
+  { path: '/employer/talent-search', label: 'Search Talent', icon: <Users className="w-4 h-4" /> },
+  { path: '/employer/subscription', label: 'Subscription', icon: <CreditCard className="w-4 h-4" /> },
+  { path: '/employer/profile', label: 'Company Profile', icon: <Building2 className="w-4 h-4" /> },
 ];
 
 const ViewApplications = () => {
@@ -77,9 +75,10 @@ const ViewApplications = () => {
   return (
     <DashboardLayout sidebarLinks={employerSidebarLinks}>
       <div className="space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Applications</h1>
-          <p className="text-gray-600">Review and manage applicants</p>
+        <div className="border-b border-stone-100 pb-8 mb-8">
+          <p className="text-[10px] uppercase tracking-luxury text-stone-400 mb-2">Recruiting</p>
+          <h1 className="font-display font-light text-stone-900 text-4xl" style={{ letterSpacing: '-0.022em' }}>Applications</h1>
+          <p className="text-stone-400 text-sm mt-2">Review and manage applicants</p>
         </div>
 
         {/* Filter */}
@@ -98,7 +97,7 @@ const ViewApplications = () => {
 
         {/* Applications List */}
         {isLoading ? (
-          <p>Loading applications...</p>
+          <p className="text-stone-400 text-sm">Loading applications...</p>
         ) : applicationsData?.applications.length === 0 ? (
           <EmptyState
             icon={FileText}
@@ -120,10 +119,10 @@ const ViewApplications = () => {
                   <div className="flex-1">
                     <div className="flex items-start justify-between mb-2">
                       <div>
-                        <h3 className="text-lg font-bold text-gray-900">
+                        <h3 className="font-light text-stone-900 text-lg" style={{ letterSpacing: '-0.01em' }}>
                           {app.applicant.firstName} {app.applicant.lastName}
                         </h3>
-                        <p className="text-sm text-gray-600">
+                        <p className="text-sm text-stone-400">
                           {app.youthProfile?.major || 'Candidate'}
                           {app.youthProfile?.university && ` • ${app.youthProfile.university}`}
                         </p>
@@ -134,7 +133,7 @@ const ViewApplications = () => {
                     </div>
 
                     {/* Contact Info */}
-                    <div className="flex flex-wrap gap-4 text-sm text-gray-600 mb-3">
+                    <div className="flex flex-wrap gap-4 text-sm text-stone-400 mb-3">
                       <span className="flex items-center gap-1">
                         <Mail className="w-4 h-4" />
                         {app.applicant.email}
@@ -165,7 +164,6 @@ const ViewApplications = () => {
                       {app.youthProfile?.cv && (
                         <a href={app.youthProfile.cv} target="_blank" rel="noopener noreferrer">
                           <Button variant="outline" size="sm">
-                            <ExternalLink className="w-4 h-4 mr-2" />
                             View CV
                           </Button>
                         </a>
@@ -198,7 +196,7 @@ const ViewApplications = () => {
           {selectedApp && (
             <div className="space-y-6">
               {/* Applicant Info */}
-              <div className="flex items-center gap-4 pb-4 border-b">
+              <div className="flex items-center gap-4 pb-4 border-b border-stone-100">
                 <Avatar
                   src={selectedApp.applicant.avatar}
                   firstName={selectedApp.applicant.firstName}
@@ -206,18 +204,18 @@ const ViewApplications = () => {
                   size="xl"
                 />
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900">
+                  <h3 className="font-light text-stone-900 text-xl" style={{ letterSpacing: '-0.01em' }}>
                     {selectedApp.applicant.firstName} {selectedApp.applicant.lastName}
                   </h3>
-                  <p className="text-gray-600">{selectedApp.youthProfile?.major}</p>
+                  <p className="text-stone-400 text-sm">{selectedApp.youthProfile?.major}</p>
                 </div>
               </div>
 
               {/* Cover Letter */}
               {selectedApp.coverLetter && (
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">Cover Letter</h4>
-                  <p className="text-gray-700 text-sm whitespace-pre-wrap bg-gray-50 p-4 rounded-lg">
+                  <h4 className="text-[10px] uppercase tracking-label text-stone-400 mb-2.5">Cover Letter</h4>
+                  <p className="text-stone-500 text-sm whitespace-pre-wrap bg-stone-50 p-4">
                     {selectedApp.coverLetter}
                   </p>
                 </div>

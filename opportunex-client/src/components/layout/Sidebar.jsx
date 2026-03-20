@@ -2,23 +2,28 @@ import { NavLink } from 'react-router-dom';
 
 const Sidebar = ({ links }) => {
   return (
-    <aside className="w-64 bg-white border-r border-gray-200 min-h-screen p-4">
-      <nav className="space-y-1">
+    <aside className="w-56 bg-white border-r border-stone-100 min-h-screen py-8 px-4 flex-shrink-0">
+      <nav className="space-y-0.5">
         {links.map((link) => (
           <NavLink
             key={link.path}
             to={link.path}
             className={({ isActive }) =>
-              `flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${isActive
-                ? 'bg-primary text-white'
-                : 'text-gray-700 hover:bg-gray-100'
+              `flex items-center gap-3 px-3 py-2.5 transition-colors duration-150 relative group ${
+                isActive
+                  ? 'text-primary border-l-2 border-primary pl-[10px] bg-primary/[0.03]'
+                  : 'text-stone-400 hover:text-stone-700 hover:bg-stone-50 border-l-2 border-transparent pl-[10px]'
               }`
             }
           >
-            {link.icon}
-            <span className="font-medium">{link.label}</span>
+            <span className="w-4 h-4 flex-shrink-0 [&>svg]:w-4 [&>svg]:h-4">
+              {link.icon}
+            </span>
+            <span className="text-[11px] uppercase tracking-label font-medium truncate">
+              {link.label}
+            </span>
             {link.badge && (
-              <span className="ml-auto bg-accent text-white text-xs px-2 py-0.5 rounded-full">
+              <span className="ml-auto bg-accent text-white text-[10px] px-1.5 py-0.5 font-medium">
                 {link.badge}
               </span>
             )}

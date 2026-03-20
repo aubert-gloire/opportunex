@@ -18,12 +18,12 @@ import { formatDate, formatCurrency } from '@/utils/helpers';
 import { SUBSCRIPTION_PLANS } from '@/utils/constants';
 
 const employerSidebarLinks = [
-  { path: '/employer/dashboard', label: 'Dashboard', icon: <LayoutDashboard className="w-5 h-5" /> },
-  { path: '/employer/post-job', label: 'Post a Job', icon: <Briefcase className="w-5 h-5" /> },
-  { path: '/employer/my-postings', label: 'My Postings', icon: <FileText className="w-5 h-5" /> },
-  { path: '/employer/talent-search', label: 'Search Talent', icon: <Users className="w-5 h-5" /> },
-  { path: '/employer/subscription', label: 'Subscription', icon: <CreditCard className="w-5 h-5" /> },
-  { path: '/employer/profile', label: 'Company Profile', icon: <Building2 className="w-5 h-5" /> },
+  { path: '/employer/dashboard', label: 'Dashboard', icon: <LayoutDashboard className="w-4 h-4" /> },
+  { path: '/employer/post-job', label: 'Post a Job', icon: <Briefcase className="w-4 h-4" /> },
+  { path: '/employer/my-postings', label: 'My Postings', icon: <FileText className="w-4 h-4" /> },
+  { path: '/employer/talent-search', label: 'Search Talent', icon: <Users className="w-4 h-4" /> },
+  { path: '/employer/subscription', label: 'Subscription', icon: <CreditCard className="w-4 h-4" /> },
+  { path: '/employer/profile', label: 'Company Profile', icon: <Building2 className="w-4 h-4" /> },
 ];
 
 const Subscription = () => {
@@ -42,23 +42,21 @@ const Subscription = () => {
   return (
     <DashboardLayout sidebarLinks={employerSidebarLinks}>
       <div className="space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Subscription & Billing</h1>
-          <p className="text-gray-600">Manage your subscription plan</p>
+        <div className="border-b border-stone-100 pb-8 mb-8">
+          <p className="text-[10px] uppercase tracking-luxury text-stone-400 mb-2">Account</p>
+          <h1 className="font-display font-light text-stone-900 text-4xl" style={{ letterSpacing: '-0.022em' }}>Subscription & Billing</h1>
+          <p className="text-stone-400 text-sm mt-2">Manage your subscription plan</p>
         </div>
 
         {/* Current Plan */}
         {currentPlan !== 'free' && isActive && (
-          <Card className="bg-primary-50 border-primary-200">
+          <Card className="border-stone-100">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-primary rounded-xl flex items-center justify-center">
-                <Crown className="w-6 h-6 text-white" />
-              </div>
-              <div className="flex-1">
-                <h3 className="text-lg font-bold text-gray-900">
+              <div>
+                <h3 className="font-light text-stone-900 text-lg" style={{ letterSpacing: '-0.01em' }}>
                   Current Plan: {currentPlan.charAt(0).toUpperCase() + currentPlan.slice(1)}
                 </h3>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-stone-400">
                   Active until {formatDate(endDate)}
                 </p>
               </div>
@@ -76,12 +74,11 @@ const Subscription = () => {
             return (
               <Card
                 key={plan.name}
-                className={`relative ${isPremium ? 'ring-2 ring-accent shadow-lg scale-105' : ''
-                  }`}
+                className={`relative ${isPremium ? 'ring-2 ring-accent' : ''}`}
               >
                 {isPremium && (
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                    <Badge variant="accent" className="shadow-lg">
+                    <Badge variant="accent">
                       Most Popular
                     </Badge>
                   </div>
@@ -90,13 +87,13 @@ const Subscription = () => {
                 <CardHeader>
                   <CardTitle className="text-center">
                     <div className="mb-2">{plan.label}</div>
-                    <div className="text-4xl font-bold text-primary">
+                    <div className="font-display font-light text-primary text-4xl" style={{ letterSpacing: '-0.022em' }}>
                       {plan.price === 0 ? (
                         'Free'
                       ) : (
                         <>
                           {formatCurrency(plan.price)}
-                          <span className="text-lg text-gray-600">/month</span>
+                          <span className="text-lg text-stone-400">/month</span>
                         </>
                       )}
                     </div>
@@ -106,8 +103,8 @@ const Subscription = () => {
                 <CardContent>
                   <ul className="space-y-3 mb-6">
                     {plan.features.map((feature, index) => (
-                      <li key={index} className="flex items-start gap-2 text-sm text-gray-700">
-                        <Check className="w-5 h-5 text-green-600 flex-shrink-0" />
+                      <li key={index} className="flex items-start gap-2 text-sm text-stone-500">
+                        <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
                         <span>{feature}</span>
                       </li>
                     ))}
@@ -132,7 +129,7 @@ const Subscription = () => {
             <CardTitle>Payment History</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-center text-gray-500 py-8">
+            <p className="text-center text-stone-400 text-sm py-8">
               No payment history yet
             </p>
           </CardContent>

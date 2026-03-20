@@ -25,12 +25,12 @@ import Select from '@/components/ui/Select';
 import { SECTORS, JOB_TYPES } from '@/utils/constants';
 
 const employerSidebarLinks = [
-  { path: '/employer/dashboard', label: 'Dashboard', icon: <LayoutDashboard className="w-5 h-5" /> },
-  { path: '/employer/post-job', label: 'Post a Job', icon: <Briefcase className="w-5 h-5" /> },
-  { path: '/employer/my-postings', label: 'My Postings', icon: <FileText className="w-5 h-5" /> },
-  { path: '/employer/talent-search', label: 'Search Talent', icon: <Users className="w-5 h-5" /> },
-  { path: '/employer/subscription', label: 'Subscription', icon: <CreditCard className="w-5 h-5" /> },
-  { path: '/employer/profile', label: 'Company Profile', icon: <Building2 className="w-5 h-5" /> },
+  { path: '/employer/dashboard', label: 'Dashboard', icon: <LayoutDashboard className="w-4 h-4" /> },
+  { path: '/employer/post-job', label: 'Post a Job', icon: <Briefcase className="w-4 h-4" /> },
+  { path: '/employer/my-postings', label: 'My Postings', icon: <FileText className="w-4 h-4" /> },
+  { path: '/employer/talent-search', label: 'Search Talent', icon: <Users className="w-4 h-4" /> },
+  { path: '/employer/subscription', label: 'Subscription', icon: <CreditCard className="w-4 h-4" /> },
+  { path: '/employer/profile', label: 'Company Profile', icon: <Building2 className="w-4 h-4" /> },
 ];
 
 const jobSchema = z.object({
@@ -122,9 +122,10 @@ const PostJob = () => {
   return (
     <DashboardLayout sidebarLinks={employerSidebarLinks}>
       <div className="max-w-4xl space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Post a Job</h1>
-          <p className="text-gray-600">Create a new job posting to attract top talent</p>
+        <div className="border-b border-stone-100 pb-8 mb-8">
+          <p className="text-[10px] uppercase tracking-luxury text-stone-400 mb-2">Recruiting</p>
+          <h1 className="font-display font-light text-stone-900 text-4xl" style={{ letterSpacing: '-0.022em' }}>Post a Job</h1>
+          <p className="text-stone-400 text-sm mt-2">Create a new job posting to attract top talent</p>
         </div>
 
         <Card>
@@ -175,9 +176,9 @@ const PostJob = () => {
                     type="checkbox"
                     id="isRemote"
                     {...register('isRemote')}
-                    className="w-4 h-4 text-primary rounded focus:ring-primary"
+                    className="w-4 h-4 text-primary focus:ring-primary"
                   />
-                  <label htmlFor="isRemote" className="text-sm font-medium text-gray-700">
+                  <label htmlFor="isRemote" className="text-[10px] uppercase tracking-label text-stone-400">
                     Remote work available
                   </label>
                 </div>
@@ -186,7 +187,7 @@ const PostJob = () => {
 
             {/* Salary Range */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-[10px] uppercase tracking-label text-stone-400 mb-2.5">
                 Salary Range (RWF)
               </label>
               <div className="grid grid-cols-2 gap-4">
@@ -205,7 +206,7 @@ const PostJob = () => {
 
             {/* Requirements */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-[10px] uppercase tracking-label text-stone-400 mb-2.5">
                 Requirements
               </label>
               <div className="space-y-2">
@@ -236,7 +237,7 @@ const PostJob = () => {
 
             {/* Required Skills */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-[10px] uppercase tracking-label text-stone-400 mb-2.5">
                 Required Skills
               </label>
               <div className="space-y-2">

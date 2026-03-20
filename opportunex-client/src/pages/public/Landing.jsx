@@ -1,201 +1,309 @@
 import { Link } from 'react-router-dom';
-import { ArrowRight, Users, Briefcase, Award, TrendingUp, CheckCircle, Building2 } from 'lucide-react';
+import { motion } from 'framer-motion';
 import Button from '@/components/ui/Button';
-import Card from '@/components/ui/Card';
+
+const fadeUp = {
+  hidden:  { opacity: 0, y: 28 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.9, ease: [0.25, 0.46, 0.45, 0.94] } },
+};
+
+const stagger = {
+  hidden:  { opacity: 0 },
+  visible: { opacity: 1, transition: { staggerChildren: 0.12, delayChildren: 0.05 } },
+};
+
+const fadeIn = {
+  hidden:  { opacity: 0 },
+  visible: { opacity: 1, transition: { duration: 1.1, ease: 'easeOut' } },
+};
 
 const Landing = () => {
   return (
-    <div className="min-h-screen">
-      {/* Hero Section */}
-      <section className="bg-gradient-to-br from-primary via-primary-600 to-accent py-20 md:py-32 lg:py-40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center text-white">
-            <h1 className="font-display text-5xl md:text-7xl lg:text-8xl font-bold mb-6 tracking-tight leading-tight">
-              Bridge Rwanda's
-              <span className="block text-accent mt-2">Employment-Education Gap</span>
-            </h1>
-            <p className="text-xl md:text-2xl text-gray-100 mb-10 max-w-3xl mx-auto leading-relaxed font-light">
-              Connect with opportunities through mentorship, skill verification, and job matching
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+    <div className="min-h-screen bg-white">
+
+      {/* ── Hero ─────────────────────────────────────────────── */}
+      <section className="min-h-[90vh] flex items-center border-b border-stone-100">
+        <div className="max-w-7xl mx-auto px-6 lg:px-10 w-full py-24 grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-8 items-center">
+
+          {/* Left — editorial heading */}
+          <motion.div
+            className="lg:col-span-7"
+            variants={stagger}
+            initial="hidden"
+            animate="visible"
+          >
+            <motion.p variants={fadeUp} className="text-[10px] uppercase tracking-luxury text-stone-400 mb-8 font-medium">
+              Rwanda's Career Platform
+            </motion.p>
+
+            <motion.h1
+              variants={fadeUp}
+              className="font-display font-light text-stone-900 leading-[1.05] mb-0"
+              style={{ fontSize: 'clamp(3.2rem, 7vw, 6.5rem)', letterSpacing: '-0.03em' }}
+            >
+              Bridge Rwanda's<br />
+              <em className="text-primary">Employment Gap.</em>
+            </motion.h1>
+
+            {/* Thin accent line */}
+            <motion.div
+              variants={fadeIn}
+              className="mt-10 w-12 h-px bg-stone-300"
+            />
+          </motion.div>
+
+          {/* Right — context + CTA + stats */}
+          <motion.div
+            className="lg:col-span-5 lg:pt-16"
+            variants={stagger}
+            initial="hidden"
+            animate="visible"
+          >
+            <motion.p variants={fadeUp} className="text-stone-500 text-lg leading-relaxed font-light mb-10 max-w-sm">
+              Connect with opportunities through mentorship, skill verification, and intelligent job matching.
+            </motion.p>
+
+            <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-3 mb-14">
               <Link to="/register">
-                <Button variant="accent" size="lg" className="w-full sm:w-auto text-lg font-semibold">
-                  Get Started Free
-                  <ArrowRight className="w-5 h-5 ml-2" />
+                <Button variant="primary" size="lg" className="w-full sm:w-auto">
+                  Get Started
                 </Button>
               </Link>
               <Link to="/jobs">
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="w-full sm:w-auto bg-white text-primary hover:bg-gray-50 text-lg font-semibold"
-                >
+                <Button variant="outline" size="lg" className="w-full sm:w-auto">
                   Browse Jobs
                 </Button>
               </Link>
-            </div>
-          </div>
+            </motion.div>
+
+            {/* Inline stats */}
+            <motion.div variants={fadeUp} className="grid grid-cols-3 gap-0 border-t border-stone-100 pt-8">
+              {[
+                { n: '50K+',   l: 'Graduates / Year' },
+                { n: '14.5K+', l: 'Open Positions'   },
+                { n: '1,000+', l: 'Verified Employers'},
+              ].map(({ n, l }, i) => (
+                <div key={i} className={`pr-6 ${i > 0 ? 'pl-6 border-l border-stone-100' : ''}`}>
+                  <div className="font-display text-2xl font-light text-stone-900" style={{ letterSpacing: '-0.02em' }}>{n}</div>
+                  <div className="text-[10px] uppercase tracking-label text-stone-400 mt-1">{l}</div>
+                </div>
+              ))}
+            </motion.div>
+          </motion.div>
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-16 bg-white border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-            <div>
-              <div className="font-display text-5xl md:text-6xl font-bold text-primary mb-3 tracking-tight">50,000+</div>
-              <div className="text-base md:text-lg text-gray-600 font-medium">University Graduates Annually</div>
-            </div>
-            <div>
-              <div className="font-display text-5xl md:text-6xl font-bold text-accent mb-3 tracking-tight">14,500+</div>
-              <div className="text-base md:text-lg text-gray-600 font-medium">Entry-Level Jobs Available</div>
-            </div>
-            <div>
-              <div className="font-display text-5xl md:text-6xl font-bold text-primary mb-3 tracking-tight">1,000+</div>
-              <div className="text-base md:text-lg text-gray-600 font-medium">Verified Employers</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* How It Works */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-primary mb-4 tracking-tight">
-              How OpportuneX Works
-            </h2>
-            <p className="text-xl md:text-2xl text-gray-600 font-light max-w-2xl mx-auto">
-              Three simple steps to launch your career
+      {/* ── Trusted by ────────────────────────────────────────── */}
+      <section className="py-10 border-b border-stone-100">
+        <div className="max-w-7xl mx-auto px-6 lg:px-10">
+          <div className="flex flex-col sm:flex-row items-center gap-8 sm:gap-0">
+            <p className="text-[10px] uppercase tracking-luxury text-stone-300 font-medium whitespace-nowrap sm:pr-12 sm:border-r sm:border-stone-100">
+              Trusted by students from
             </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <Card hover className="text-center p-8">
-              <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Users className="w-8 h-8 text-primary" />
-              </div>
-              <h3 className="font-display text-2xl md:text-3xl font-semibold text-gray-900 mb-3 tracking-tight">1. Create Your Profile</h3>
-              <p className="text-gray-600 leading-relaxed text-base md:text-lg">
-                Sign up and build your professional profile with skills, education, and experience
-              </p>
-            </Card>
-
-            <Card hover className="text-center p-8">
-              <div className="w-16 h-16 bg-accent-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Award className="w-8 h-8 text-accent" />
-              </div>
-              <h3 className="font-display text-2xl md:text-3xl font-semibold text-gray-900 mb-3 tracking-tight">2. Verify Your Skills</h3>
-              <p className="text-gray-600 leading-relaxed text-base md:text-lg">
-                Take skill tests to earn verified badges that showcase your abilities to employers
-              </p>
-            </Card>
-
-            <Card hover className="text-center p-8">
-              <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Briefcase className="w-8 h-8 text-primary" />
-              </div>
-              <h3 className="font-display text-2xl md:text-3xl font-semibold text-gray-900 mb-3 tracking-tight">3. Get Matched & Apply</h3>
-              <p className="text-gray-600 leading-relaxed text-base md:text-lg">
-                Receive personalized job recommendations and connect with top employers in Rwanda
-              </p>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* Features */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div>
-              <h2 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-primary mb-8 tracking-tight">
-                Why Choose OpportuneX?
-              </h2>
-              <div className="space-y-6">
-                <div className="flex gap-4">
-                  <CheckCircle className="w-6 h-6 text-green-600 flex-shrink-0 mt-1" />
-                  <div>
-                    <h4 className="font-semibold text-lg md:text-xl text-gray-900 mb-2">Verified Companies</h4>
-                    <p className="text-gray-600 leading-relaxed">
-                      All employers are verified to ensure legitimate opportunities
-                    </p>
-                  </div>
-                </div>
-                <div className="flex gap-4">
-                  <CheckCircle className="w-6 h-6 text-green-600 flex-shrink-0 mt-1" />
-                  <div>
-                    <h4 className="font-semibold text-lg md:text-xl text-gray-900 mb-2">Skill Certification</h4>
-                    <p className="text-gray-600 leading-relaxed">
-                      Earn badges through skill tests that prove your capabilities
-                    </p>
-                  </div>
-                </div>
-                <div className="flex gap-4">
-                  <CheckCircle className="w-6 h-6 text-green-600 flex-shrink-0 mt-1" />
-                  <div>
-                    <h4 className="font-semibold text-lg md:text-xl text-gray-900 mb-2">Mentorship Access</h4>
-                    <p className="text-gray-600 leading-relaxed">
-                      Connect with industry professionals for career guidance
-                    </p>
-                  </div>
-                </div>
-                <div className="flex gap-4">
-                  <CheckCircle className="w-6 h-6 text-green-600 flex-shrink-0 mt-1" />
-                  <div>
-                    <h4 className="font-semibold text-lg md:text-xl text-gray-900 mb-2">Smart Job Matching</h4>
-                    <p className="text-gray-600 leading-relaxed">
-                      AI-powered recommendations based on your profile and skills
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-gradient-to-br from-primary-50 to-accent-50 rounded-2xl p-10">
-              <TrendingUp className="w-16 h-16 text-primary mb-6" />
-              <h3 className="font-display text-3xl md:text-4xl font-bold text-gray-900 mb-4 tracking-tight">
-                Join 10,000+ Students & Graduates
-              </h3>
-              <p className="text-gray-700 mb-8 leading-relaxed text-lg">
-                From University of Rwanda, ALU, AUCA, and other leading institutions finding their dream careers
-              </p>
-              <Link to="/register">
-                <Button variant="primary" size="lg" className="w-full text-lg font-semibold">
-                  Start Your Journey
-                </Button>
-              </Link>
+            <div className="flex flex-wrap justify-center sm:justify-start items-center gap-8 sm:pl-12 opacity-40">
+              {['University of Rwanda', 'ALU', 'AUCA', 'INES Ruhengeri', 'Mount Kenya University'].map((name) => (
+                <span key={name} className="font-display text-lg text-stone-700">{name}</span>
+              ))}
             </div>
           </div>
         </div>
       </section>
 
-      {/* Partner Universities */}
-      <section className="py-20 bg-gray-50 border-t">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h3 className="text-center text-gray-600 font-medium text-sm md:text-base tracking-wide uppercase mb-12">
-            Trusted by Students from Top Rwandan Universities
-          </h3>
-          <div className="flex flex-wrap justify-center items-center gap-12 md:gap-16 opacity-70">
-            <div className="font-display text-2xl md:text-3xl font-semibold text-gray-700">University of Rwanda</div>
-            <div className="font-display text-2xl md:text-3xl font-semibold text-gray-700">ALU</div>
-            <div className="font-display text-2xl md:text-3xl font-semibold text-gray-700">AUCA</div>
+      {/* ── How it works ─────────────────────────────────────── */}
+      <section className="py-32 bg-stone-50">
+        <div className="max-w-7xl mx-auto px-6 lg:px-10">
+
+          <motion.div
+            className="mb-20"
+            variants={stagger}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-80px' }}
+          >
+            <motion.p variants={fadeUp} className="text-[10px] uppercase tracking-luxury text-stone-400 mb-5">
+              The Process
+            </motion.p>
+            <motion.h2
+              variants={fadeUp}
+              className="font-display font-light text-stone-900"
+              style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', letterSpacing: '-0.022em' }}
+            >
+              Three steps to your next role
+            </motion.h2>
+          </motion.div>
+
+          <motion.div
+            className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-stone-200"
+            variants={stagger}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-60px' }}
+          >
+            {[
+              {
+                n:     '01',
+                title: 'Create Your Profile',
+                desc:  'Build your professional presence with skills, education, and experience in minutes.',
+              },
+              {
+                n:     '02',
+                title: 'Verify Your Skills',
+                desc:  'Take targeted assessments to earn verified badges that prove your capabilities to employers.',
+              },
+              {
+                n:     '03',
+                title: 'Get Matched & Apply',
+                desc:  'Receive curated job recommendations and connect directly with Rwanda's top employers.',
+              },
+            ].map(({ n, title, desc }) => (
+              <motion.div
+                key={n}
+                variants={fadeUp}
+                className="py-12 md:py-0 md:px-12 first:pl-0 last:pr-0"
+              >
+                <div
+                  className="font-display font-light text-stone-100 mb-6 select-none"
+                  style={{ fontSize: '5rem', lineHeight: 1, letterSpacing: '-0.04em' }}
+                >
+                  {n}
+                </div>
+                <h3 className="font-display text-xl font-normal text-stone-900 mb-3" style={{ letterSpacing: '-0.016em' }}>
+                  {title}
+                </h3>
+                <p className="text-stone-500 text-sm leading-relaxed">{desc}</p>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ── Why OpportuneX ───────────────────────────────────── */}
+      <section className="py-32 bg-white">
+        <div className="max-w-7xl mx-auto px-6 lg:px-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-start">
+
+            {/* Feature list */}
+            <motion.div
+              variants={stagger}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: '-80px' }}
+            >
+              <motion.p variants={fadeUp} className="text-[10px] uppercase tracking-luxury text-stone-400 mb-5">
+                Why OpportuneX
+              </motion.p>
+              <motion.h2
+                variants={fadeUp}
+                className="font-display font-light text-stone-900 mb-14"
+                style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', letterSpacing: '-0.022em' }}
+              >
+                Built for Rwanda's<br /><em>next generation</em>
+              </motion.h2>
+
+              <div className="space-y-0">
+                {[
+                  {
+                    title: 'Verified Employers',
+                    desc:  'Every company is vetted to ensure you only see legitimate, quality opportunities.',
+                  },
+                  {
+                    title: 'Skill Certification',
+                    desc:  'Earn badges through curated assessments that objectively prove your capabilities.',
+                  },
+                  {
+                    title: 'Mentorship Network',
+                    desc:  'Connect with industry professionals for structured career guidance and support.',
+                  },
+                  {
+                    title: 'Intelligent Matching',
+                    desc:  'Our algorithm surfaces roles aligned to your skills, experience, and ambitions.',
+                  },
+                ].map(({ title, desc }, i) => (
+                  <motion.div
+                    key={i}
+                    variants={fadeUp}
+                    className="border-t border-stone-100 py-7"
+                  >
+                    <h4 className="text-sm font-medium text-stone-900 mb-1.5">{title}</h4>
+                    <p className="text-sm text-stone-500 leading-relaxed">{desc}</p>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+
+            {/* Right dark panel */}
+            <motion.div
+              variants={fadeUp}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: '-60px' }}
+              className="bg-primary p-12 lg:p-16 flex flex-col justify-between min-h-[480px]"
+            >
+              <div>
+                <div
+                  className="font-display font-light text-white leading-none mb-3"
+                  style={{ fontSize: 'clamp(3.5rem, 6vw, 5rem)', letterSpacing: '-0.03em' }}
+                >
+                  10,000<span className="text-white/30">+</span>
+                </div>
+                <div className="text-[10px] uppercase tracking-luxury text-white/40 mb-10">
+                  Students & Graduates
+                </div>
+                <p className="text-white/60 text-sm leading-relaxed font-light max-w-[260px]">
+                  From University of Rwanda, ALU, AUCA, and Rwanda's other leading institutions — all finding their path.
+                </p>
+              </div>
+
+              <div className="mt-12">
+                <Link to="/register">
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="border-white/30 text-white hover:bg-white hover:text-primary w-full"
+                  >
+                    Start Your Journey
+                  </Button>
+                </Link>
+              </div>
+            </motion.div>
+
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-24 bg-primary text-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold mb-6 tracking-tight">
-            Ready to Transform Your Career?
-          </h2>
-          <p className="text-xl md:text-2xl text-gray-100 mb-10 leading-relaxed font-light max-w-2xl mx-auto">
-            Join OpportuneX today and connect with opportunities that match your skills and ambitions
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+      {/* ── CTA ──────────────────────────────────────────────── */}
+      <section className="py-32 bg-primary">
+        <motion.div
+          className="max-w-4xl mx-auto px-6 lg:px-10 text-center"
+          variants={stagger}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+        >
+          <motion.p variants={fadeIn} className="text-[10px] uppercase tracking-luxury text-white/40 mb-8">
+            Join OpportuneX
+          </motion.p>
+
+          <motion.h2
+            variants={fadeUp}
+            className="font-display font-light text-white leading-[1.1] mb-8"
+            style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', letterSpacing: '-0.026em' }}
+          >
+            Ready to Transform<br />
+            <em>Your Career?</em>
+          </motion.h2>
+
+          <motion.p variants={fadeUp} className="text-white/50 text-base leading-relaxed mb-14 max-w-lg mx-auto font-light">
+            Whether you're seeking opportunity or exceptional talent, your journey starts here.
+          </motion.p>
+
+          <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/register?role=youth">
-              <Button variant="accent" size="lg" className="w-full sm:w-auto text-lg font-semibold">
+              <Button
+                variant="accent"
+                size="lg"
+                className="w-full sm:w-auto"
+              >
                 I'm Looking for Jobs
               </Button>
             </Link>
@@ -203,15 +311,15 @@ const Landing = () => {
               <Button
                 variant="outline"
                 size="lg"
-                className="w-full sm:w-auto bg-white text-primary hover:bg-gray-50 text-lg font-semibold"
+                className="w-full sm:w-auto border-white/30 text-white hover:bg-white hover:text-primary"
               >
-                <Building2 className="w-5 h-5 mr-2" />
                 I'm Hiring Talent
               </Button>
             </Link>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </section>
+
     </div>
   );
 };

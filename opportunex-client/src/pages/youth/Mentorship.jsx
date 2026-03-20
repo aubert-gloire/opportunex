@@ -21,9 +21,9 @@ import { formatDate, getInitials } from '@/utils/helpers';
 import { SECTORS } from '@/utils/constants';
 
 const youthSidebarLinks = [
-  { path: '/youth/dashboard', label: 'Dashboard', icon: <Users className="w-5 h-5" /> },
-  { path: '/youth/jobs', label: 'Find Jobs', icon: <Users className="w-5 h-5" /> },
-  { path: '/youth/mentorship', label: 'Mentorship', icon: <Users className="w-5 h-5" /> },
+  { path: '/youth/dashboard', label: 'Dashboard', icon: <Users className="w-4 h-4" /> },
+  { path: '/youth/jobs', label: 'Find Jobs', icon: <Users className="w-4 h-4" /> },
+  { path: '/youth/mentorship', label: 'Mentorship', icon: <Users className="w-4 h-4" /> },
 ];
 
 const Mentorship = () => {
@@ -62,29 +62,30 @@ const Mentorship = () => {
   return (
     <DashboardLayout sidebarLinks={youthSidebarLinks}>
       <div className="space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Mentorship</h1>
-          <p className="text-gray-600">Connect with experienced professionals</p>
+        <div className="border-b border-stone-100 pb-8 mb-8">
+          <p className="text-[10px] uppercase tracking-luxury text-stone-400 mb-2">Network</p>
+          <h1 className="font-display font-light text-stone-900 text-4xl" style={{ letterSpacing: '-0.022em' }}>Mentorship</h1>
+          <p className="text-stone-400 text-sm mt-2">Connect with experienced professionals</p>
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-2 border-b">
+        <div className="flex gap-2 border-b border-stone-100">
           <button
             onClick={() => setActiveTab('find')}
-            className={`px-4 py-2 font-medium transition-colors ${
+            className={`px-4 py-2 text-sm font-light transition-colors ${
               activeTab === 'find'
                 ? 'text-primary border-b-2 border-primary'
-                : 'text-gray-600 hover:text-gray-900'
+                : 'text-stone-400 hover:text-stone-900'
             }`}
           >
             Find Mentors
           </button>
           <button
             onClick={() => setActiveTab('my-sessions')}
-            className={`px-4 py-2 font-medium transition-colors ${
+            className={`px-4 py-2 text-sm font-light transition-colors ${
               activeTab === 'my-sessions'
                 ? 'text-primary border-b-2 border-primary'
-                : 'text-gray-600 hover:text-gray-900'
+                : 'text-stone-400 hover:text-stone-900'
             }`}
           >
             My Sessions
@@ -100,19 +101,19 @@ const Mentorship = () => {
                   placeholder="Search mentors by name or expertise..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  icon={<Search className="w-5 h-5" />}
+                  icon={<Search className="w-4 h-4" />}
                 />
               </CardContent>
             </Card>
 
             {loadingMentors ? (
               <div className="text-center py-12">
-                <p className="text-gray-600">Loading mentors...</p>
+                <p className="text-stone-400 text-sm">Loading mentors...</p>
               </div>
             ) : mentors && mentors.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {mentors.map((mentor) => (
-                  <Card key={mentor._id} className="hover:shadow-lg transition">
+                  <Card key={mentor._id} hover>
                     <CardContent className="pt-6">
                       <div className="text-center mb-4">
                         <Avatar
@@ -120,20 +121,20 @@ const Mentorship = () => {
                           alt={`${mentor.firstName} ${mentor.lastName}`}
                           className="w-20 h-20 mx-auto mb-3"
                         />
-                        <h3 className="text-lg font-semibold text-gray-900">
+                        <h3 className="font-light text-stone-900 text-lg" style={{ letterSpacing: '-0.01em' }}>
                           {mentor.firstName} {mentor.lastName}
                         </h3>
-                        <p className="text-sm text-gray-600">{mentor.title}</p>
+                        <p className="text-sm text-stone-400">{mentor.title}</p>
                       </div>
 
                       {mentor.bio && (
-                        <p className="text-sm text-gray-700 mb-4 line-clamp-3">
+                        <p className="text-sm text-stone-500 mb-4 line-clamp-3">
                           {mentor.bio}
                         </p>
                       )}
 
                       <div className="flex items-center justify-between mb-4">
-                        <div className="flex items-center gap-1 text-sm text-gray-600">
+                        <div className="flex items-center gap-1 text-sm text-stone-400">
                           <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                           <span>4.8 (12)</span>
                         </div>
@@ -162,7 +163,7 @@ const Mentorship = () => {
           <div className="space-y-4">
             {loadingSessions ? (
               <div className="text-center py-12">
-                <p className="text-gray-600">Loading your sessions...</p>
+                <p className="text-stone-400 text-sm">Loading your sessions...</p>
               </div>
             ) : sessions && sessions.length > 0 ? (
               sessions.map((session) => (
@@ -177,17 +178,17 @@ const Mentorship = () => {
                       <div className="flex-1">
                         <div className="flex items-start justify-between mb-2">
                           <div>
-                            <h3 className="font-semibold text-gray-900">
+                            <h3 className="font-light text-stone-900" style={{ letterSpacing: '-0.01em' }}>
                               {session.topic}
                             </h3>
-                            <p className="text-sm text-gray-600">
+                            <p className="text-sm text-stone-400">
                               with {session.mentor?.firstName} {session.mentor?.lastName}
                             </p>
                           </div>
                           {getStatusBadge(session.status)}
                         </div>
 
-                        <div className="flex items-center gap-4 text-sm text-gray-600 mb-3">
+                        <div className="flex items-center gap-4 text-sm text-stone-400 mb-3">
                           <div className="flex items-center gap-1">
                             <Calendar className="w-4 h-4" />
                             <span>{formatDate(session.scheduledAt)}</span>
@@ -200,12 +201,10 @@ const Mentorship = () => {
 
                         {session.status === 'confirmed' && (
                           <div className="flex gap-2">
-                            <Button variant="primary" size="sm" className="flex items-center gap-2">
-                              <Video className="w-4 h-4" />
+                            <Button variant="primary" size="sm">
                               Join Meeting
                             </Button>
-                            <Button variant="outline" size="sm" className="flex items-center gap-2">
-                              <MessageSquare className="w-4 h-4" />
+                            <Button variant="outline" size="sm">
                               Message
                             </Button>
                           </div>

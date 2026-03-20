@@ -11,7 +11,7 @@ import {
   Eye,
   Edit,
   Trash2,
-  MoreVertical,
+  Plus,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { jobAPI } from '@/api';
@@ -24,12 +24,12 @@ import EmptyState from '@/components/ui/EmptyState';
 import { formatDate, statusColors } from '@/utils/helpers';
 
 const employerSidebarLinks = [
-  { path: '/employer/dashboard', label: 'Dashboard', icon: <LayoutDashboard className="w-5 h-5" /> },
-  { path: '/employer/post-job', label: 'Post a Job', icon: <Briefcase className="w-5 h-5" /> },
-  { path: '/employer/my-postings', label: 'My Postings', icon: <FileText className="w-5 h-5" /> },
-  { path: '/employer/talent-search', label: 'Search Talent', icon: <Users className="w-5 h-5" /> },
-  { path: '/employer/subscription', label: 'Subscription', icon: <CreditCard className="w-5 h-5" /> },
-  { path: '/employer/profile', label: 'Company Profile', icon: <Building2 className="w-5 h-5" /> },
+  { path: '/employer/dashboard', label: 'Dashboard', icon: <LayoutDashboard className="w-4 h-4" /> },
+  { path: '/employer/post-job', label: 'Post a Job', icon: <Briefcase className="w-4 h-4" /> },
+  { path: '/employer/my-postings', label: 'My Postings', icon: <FileText className="w-4 h-4" /> },
+  { path: '/employer/talent-search', label: 'Search Talent', icon: <Users className="w-4 h-4" /> },
+  { path: '/employer/subscription', label: 'Subscription', icon: <CreditCard className="w-4 h-4" /> },
+  { path: '/employer/profile', label: 'Company Profile', icon: <Building2 className="w-4 h-4" /> },
 ];
 
 const MyPostings = () => {
@@ -65,13 +65,13 @@ const MyPostings = () => {
     <DashboardLayout sidebarLinks={employerSidebarLinks}>
       <div className="space-y-6">
         <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">My Job Postings</h1>
-            <p className="text-gray-600">Manage your job listings</p>
+          <div className="border-b border-stone-100 pb-8 mb-8 flex-1">
+            <p className="text-[10px] uppercase tracking-luxury text-stone-400 mb-2">Recruiting</p>
+            <h1 className="font-display font-light text-stone-900 text-4xl" style={{ letterSpacing: '-0.022em' }}>My Job Postings</h1>
+            <p className="text-stone-400 text-sm mt-2">Manage your job listings</p>
           </div>
-          <Link to="/employer/post-job">
+          <Link to="/employer/post-job" className="ml-4">
             <Button variant="accent">
-              <Plus className="w-4 h-4 mr-2" />
               Post New Job
             </Button>
           </Link>
@@ -95,7 +95,7 @@ const MyPostings = () => {
 
         {/* Job Postings */}
         {isLoading ? (
-          <p>Loading postings...</p>
+          <p className="text-stone-400 text-sm">Loading postings...</p>
         ) : postingsData?.jobs.length === 0 ? (
           <EmptyState
             icon={Briefcase}
@@ -115,7 +115,7 @@ const MyPostings = () => {
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <Link to={`/jobs/${job._id}`}>
-                        <h3 className="text-xl font-bold text-gray-900 hover:text-primary transition-colors mb-2">
+                        <h3 className="font-light text-stone-900 text-xl hover:text-primary transition-colors mb-2" style={{ letterSpacing: '-0.01em' }}>
                           {job.title}
                         </h3>
                       </Link>
@@ -126,14 +126,14 @@ const MyPostings = () => {
                         <Badge variant="primary">{job.type}</Badge>
                         {job.sector && <Badge variant="gray">{job.sector}</Badge>}
                       </div>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-sm text-stone-400">
                         Posted {formatDate(job.createdAt)}
                       </p>
                     </div>
                   </div>
 
                   {/* Stats */}
-                  <div className="flex items-center gap-6 text-sm text-gray-600">
+                  <div className="flex items-center gap-6 text-sm text-stone-400">
                     <span className="flex items-center gap-1">
                       <FileText className="w-4 h-4" />
                       {job.applicationsCount} applications
@@ -145,11 +145,10 @@ const MyPostings = () => {
                   </div>
 
                   {/* Actions */}
-                  <div className="flex gap-2 pt-4 border-t border-gray-200">
+                  <div className="flex gap-2 pt-4 border-t border-stone-50">
                     {job.status === 'open' && (
                       <Link to={`/employer/applications/${job._id}`} className="flex-1">
                         <Button variant="primary" className="w-full">
-                          <FileText className="w-4 h-4 mr-2" />
                           View Applications ({job.applicationsCount})
                         </Button>
                       </Link>

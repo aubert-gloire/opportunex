@@ -23,12 +23,12 @@ import { SKILL_CATEGORIES } from '@/utils/constants';
 import { skillBadges, formatDate } from '@/utils/helpers';
 
 const youthSidebarLinks = [
-  { path: '/youth/dashboard', label: 'Dashboard', icon: <LayoutDashboard className="w-5 h-5" /> },
-  { path: '/youth/jobs', label: 'Find Jobs', icon: <Briefcase className="w-5 h-5" /> },
-  { path: '/youth/applications', label: 'My Applications', icon: <FileText className="w-5 h-5" /> },
-  { path: '/youth/mentorship', label: 'Mentorship', icon: <Users className="w-5 h-5" /> },
-  { path: '/youth/skill-tests', label: 'Skill Tests', icon: <GraduationCap className="w-5 h-5" /> },
-  { path: '/youth/profile', label: 'My Profile', icon: <User className="w-5 h-5" /> },
+  { path: '/youth/dashboard', label: 'Dashboard', icon: <LayoutDashboard className="w-4 h-4" /> },
+  { path: '/youth/jobs', label: 'Find Jobs', icon: <Briefcase className="w-4 h-4" /> },
+  { path: '/youth/applications', label: 'My Applications', icon: <FileText className="w-4 h-4" /> },
+  { path: '/youth/mentorship', label: 'Mentorship', icon: <Users className="w-4 h-4" /> },
+  { path: '/youth/skill-tests', label: 'Skill Tests', icon: <GraduationCap className="w-4 h-4" /> },
+  { path: '/youth/profile', label: 'My Profile', icon: <User className="w-4 h-4" /> },
 ];
 
 const SkillTests = () => {
@@ -56,18 +56,19 @@ const SkillTests = () => {
   return (
     <DashboardLayout sidebarLinks={youthSidebarLinks}>
       <div className="space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Skill Tests</h1>
-          <p className="text-gray-600">Verify your skills and earn badges</p>
+        <div className="border-b border-stone-100 pb-8 mb-8">
+          <p className="text-[10px] uppercase tracking-luxury text-stone-400 mb-2">Skills</p>
+          <h1 className="font-display font-light text-stone-900 text-4xl" style={{ letterSpacing: '-0.022em' }}>Skill Tests</h1>
+          <p className="text-stone-400 text-sm mt-2">Verify your skills and earn badges</p>
         </div>
 
         {/* Info Banner */}
-        <Card className="bg-accent-50 border-accent-200">
+        <Card className="border-stone-100">
           <div className="flex items-start gap-3">
-            <Award className="w-6 h-6 text-accent flex-shrink-0 mt-1" />
+            <Award className="w-5 h-5 text-stone-400 flex-shrink-0 mt-1" />
             <div>
-              <h3 className="font-semibold text-gray-900 mb-1">Earn Verified Badges</h3>
-              <p className="text-sm text-gray-700">
+              <h3 className="font-light text-stone-900 mb-1" style={{ letterSpacing: '-0.01em' }}>Earn Verified Badges</h3>
+              <p className="text-sm text-stone-400">
                 Pass skill tests to add verified badges to your profile. Employers are 5x more likely to view profiles with verified skills!
               </p>
             </div>
@@ -75,21 +76,21 @@ const SkillTests = () => {
         </Card>
 
         {/* Tabs */}
-        <div className="flex gap-2 border-b border-gray-200">
+        <div className="flex gap-2 border-b border-stone-100">
           <button
             onClick={() => setActiveTab('available')}
-            className={`px-6 py-3 font-medium transition-colors border-b-2 ${activeTab === 'available'
+            className={`px-6 py-3 text-sm font-light transition-colors border-b-2 ${activeTab === 'available'
                 ? 'border-primary text-primary'
-                : 'border-transparent text-gray-600 hover:text-gray-900'
+                : 'border-transparent text-stone-400 hover:text-stone-900'
               }`}
           >
             Available Tests
           </button>
           <button
             onClick={() => setActiveTab('results')}
-            className={`px-6 py-3 font-medium transition-colors border-b-2 ${activeTab === 'results'
+            className={`px-6 py-3 text-sm font-light transition-colors border-b-2 ${activeTab === 'results'
                 ? 'border-primary text-primary'
-                : 'border-transparent text-gray-600 hover:text-gray-900'
+                : 'border-transparent text-stone-400 hover:text-stone-900'
               }`}
           >
             My Results
@@ -112,7 +113,7 @@ const SkillTests = () => {
             </Card>
 
             {loadingTests ? (
-              <p>Loading tests...</p>
+              <p className="text-stone-400 text-sm">Loading tests...</p>
             ) : testsData?.tests.length === 0 ? (
               <EmptyState
                 icon={GraduationCap}
@@ -139,11 +140,11 @@ const SkillTests = () => {
                             {test.difficulty}
                           </Badge>
                         </div>
-                        <h3 className="text-lg font-bold text-gray-900 mb-2">{test.title}</h3>
-                        <p className="text-gray-600 text-sm line-clamp-2">{test.description}</p>
+                        <h3 className="font-light text-stone-900 text-lg mb-2" style={{ letterSpacing: '-0.01em' }}>{test.title}</h3>
+                        <p className="text-stone-400 text-sm line-clamp-2">{test.description}</p>
                       </div>
 
-                      <div className="space-y-2 text-sm text-gray-600">
+                      <div className="space-y-2 text-sm text-stone-400">
                         <div className="flex items-center gap-2">
                           <FileText className="w-4 h-4" />
                           <span>{test.questions.length} questions</span>
@@ -175,7 +176,7 @@ const SkillTests = () => {
         {activeTab === 'results' && (
           <div className="space-y-4">
             {loadingResults ? (
-              <p>Loading results...</p>
+              <p className="text-stone-400 text-sm">Loading results...</p>
             ) : resultsData?.results.length === 0 ? (
               <EmptyState
                 icon={Award}
@@ -192,10 +193,10 @@ const SkillTests = () => {
                 <Card key={result._id}>
                   <div className="flex items-center justify-between">
                     <div className="flex-1">
-                      <h3 className="text-lg font-bold text-gray-900 mb-1">
+                      <h3 className="font-light text-stone-900 text-lg mb-1" style={{ letterSpacing: '-0.01em' }}>
                         {result.test.title}
                       </h3>
-                      <p className="text-sm text-gray-600 mb-3">
+                      <p className="text-sm text-stone-400 mb-3">
                         Completed {formatDate(result.completedAt)}
                       </p>
                       <div className="flex items-center gap-3">
@@ -212,10 +213,10 @@ const SkillTests = () => {
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="text-4xl font-bold text-primary mb-1">
+                      <div className="font-display font-light text-primary text-4xl mb-1">
                         {result.percentage}%
                       </div>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-sm text-stone-400">
                         {result.score} / {result.totalPoints} points
                       </p>
                     </div>

@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { Menu, X, LogOut, User, Briefcase, LayoutDashboard } from 'lucide-react';
+import { Menu, X, LogOut, LayoutDashboard } from 'lucide-react';
 import { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import Avatar from '../ui/Avatar';
@@ -17,148 +17,106 @@ const Navbar = () => {
 
   const getDashboardLink = () => {
     if (!user) return '/';
-    switch (user.role) {
-      case 'youth':
-        return '/youth/dashboard';
-      case 'employer':
-        return '/employer/dashboard';
-      case 'admin':
-        return '/admin/dashboard';
-      default:
-        return '/';
-    }
+    const map = { youth: '/youth/dashboard', employer: '/employer/dashboard', admin: '/admin/dashboard' };
+    return map[user.role] || '/';
   };
 
+  const navLink = 'text-[11px] uppercase tracking-label text-stone-500 hover:text-stone-900 transition-colors duration-150 font-medium';
+
   return (
-    <nav className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-40">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          {/* Logo */}
-          <Link to="/" className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-gradient-to-br from-primary to-accent rounded-lg flex items-center justify-center shadow-md">
-              <span className="text-white font-bold text-xl">O</span>
-            </div>
-            <span className="text-xl md:text-2xl font-display font-bold text-primary tracking-tight">OpportuneX</span>
+    <nav className="bg-white border-b border-stone-100 sticky top-0 z-40">
+      <div className="max-w-7xl mx-auto px-6 lg:px-10">
+        <div className="flex justify-between items-center h-14">
+
+          {/* Wordmark */}
+          <Link to="/" className="font-display text-xl italic text-primary tracking-tight">
+            OpportuneX
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-6">
+          <div className="hidden md:flex items-center gap-8">
             {!isAuthenticated ? (
               <>
-                <Link to="/jobs" className="text-gray-700 hover:text-primary transition-colors font-medium">
-                  Browse Jobs
-                </Link>
-                <Link to="/about" className="text-gray-700 hover:text-primary transition-colors font-medium">
-                  About
-                </Link>
+                <Link to="/jobs" className={navLink}>Browse Jobs</Link>
+                <Link to="/about" className={navLink}>About</Link>
+                <div className="w-px h-4 bg-stone-200 mx-1" />
                 <Link to="/login">
-                  <Button variant="ghost">Login</Button>
+                  <Button variant="ghost" size="sm">Sign In</Button>
                 </Link>
                 <Link to="/register">
-                  <Button variant="accent">Get Started</Button>
+                  <Button variant="primary" size="sm">Get Started</Button>
                 </Link>
               </>
             ) : (
               <>
-                <Link
-                  to={getDashboardLink()}
-                  className="flex items-center gap-2 text-gray-700 hover:text-primary transition-colors font-medium"
-                >
-                  <LayoutDashboard className="w-4 h-4" />
+                <Link to={getDashboardLink()} className={navLink}>
                   Dashboard
                 </Link>
 
                 {user.role === 'youth' && (
-                  <Link to="/youth/jobs" className="text-gray-700 hover:text-primary transition-colors font-medium">
-                    Find Jobs
-                  </Link>
+                  <Link to="/youth/jobs" className={navLink}>Find Jobs</Link>
                 )}
 
                 {user.role === 'employer' && (
-                  <Link to="/employer/post-job" className="text-gray-700 hover:text-primary transition-colors font-medium">
-                    Post Job
-                  </Link>
+                  <Link to="/employer/post-job" className={navLink}>Post a Job</Link>
                 )}
 
-                <div className="flex items-center gap-3 ml-4 pl-4 border-l border-gray-200">
+                <div className="flex items-center gap-3 ml-2 pl-4 border-l border-stone-100">
                   <Link to={`${getDashboardLink().split('/dashboard')[0]}/profile`}>
                     <Avatar
                       src={user.avatar}
                       firstName={user.firstName}
                       lastName={user.lastName}
-                      size="md"
-                      className="cursor-pointer hover:ring-2 hover:ring-primary transition-all"
+                      size="sm"
+                      className="cursor-pointer hover:ring-1 hover:ring-primary transition-all"
                     />
                   </Link>
                   <button
                     onClick={handleLogout}
-                    className="text-gray-600 hover:text-red-600 transition-colors"
-                    title="Logout"
+                    className="text-stone-400 hover:text-red-500 transition-colors"
+                    title="Sign out"
                   >
-                    <LogOut className="w-5 h-5" />
+                    <LogOut className="w-4 h-4" />
                   </button>
                 </div>
               </>
             )}
           </div>
 
-          {/* Mobile Menu Button */}
+          {/* Mobile toggle */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="md:hidden text-gray-700"
+            className="md:hidden text-stone-600 hover:text-stone-900"
           >
-            {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Mobile menu */}
         {isMenuOpen && (
-          <div className="md:hidden py-4 border-t border-gray-200">
+          <div className="md:hidden py-5 border-t border-stone-100 space-y-1">
             {!isAuthenticated ? (
-              <div className="flex flex-col gap-2">
-                <Link
-                  to="/jobs"
-                  className="px-4 py-2 text-gray-700 hover:bg-gray-50 rounded-lg"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Browse Jobs
-                </Link>
-                <Link
-                  to="/about"
-                  className="px-4 py-2 text-gray-700 hover:bg-gray-50 rounded-lg"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  About
-                </Link>
-                <Link to="/login" onClick={() => setIsMenuOpen(false)}>
-                  <Button variant="ghost" className="w-full">
-                    Login
-                  </Button>
-                </Link>
-                <Link to="/register" onClick={() => setIsMenuOpen(false)}>
-                  <Button variant="accent" className="w-full">
-                    Get Started
-                  </Button>
-                </Link>
-              </div>
+              <>
+                <Link to="/jobs" className="block py-2.5 text-[11px] uppercase tracking-label text-stone-500" onClick={() => setIsMenuOpen(false)}>Browse Jobs</Link>
+                <Link to="/about" className="block py-2.5 text-[11px] uppercase tracking-label text-stone-500" onClick={() => setIsMenuOpen(false)}>About</Link>
+                <div className="pt-3 space-y-2">
+                  <Link to="/login" onClick={() => setIsMenuOpen(false)}>
+                    <Button variant="outline" className="w-full">Sign In</Button>
+                  </Link>
+                  <Link to="/register" onClick={() => setIsMenuOpen(false)}>
+                    <Button variant="primary" className="w-full">Get Started</Button>
+                  </Link>
+                </div>
+              </>
             ) : (
-              <div className="flex flex-col gap-2">
-                <Link
-                  to={getDashboardLink()}
-                  className="px-4 py-2 text-gray-700 hover:bg-gray-50 rounded-lg flex items-center gap-2"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  <LayoutDashboard className="w-4 h-4" />
-                  Dashboard
+              <>
+                <Link to={getDashboardLink()} className="flex items-center gap-2 py-2.5 text-[11px] uppercase tracking-label text-stone-500" onClick={() => setIsMenuOpen(false)}>
+                  <LayoutDashboard className="w-3.5 h-3.5" />Dashboard
                 </Link>
-                <button
-                  onClick={handleLogout}
-                  className="px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg text-left flex items-center gap-2"
-                >
-                  <LogOut className="w-4 h-4" />
-                  Logout
+                <button onClick={handleLogout} className="flex items-center gap-2 py-2.5 text-[11px] uppercase tracking-label text-red-500 w-full">
+                  <LogOut className="w-3.5 h-3.5" />Sign Out
                 </button>
-              </div>
+              </>
             )}
           </div>
         )}

@@ -15,10 +15,10 @@ import { formatDuration } from '@/utils/helpers';
 import { SECTORS } from '@/utils/constants';
 
 const youthSidebarLinks = [
-  { path: '/youth/dashboard', label: 'Dashboard', icon: <BookOpen className="w-5 h-5" /> },
-  { path: '/youth/profile', label: 'My Profile', icon: <Users className="w-5 h-5" /> },
-  { path: '/youth/courses', label: 'Courses', icon: <BookOpen className="w-5 h-5" /> },
-  { path: '/youth/my-courses', label: 'My Courses', icon: <BookOpen className="w-5 h-5" /> },
+  { path: '/youth/dashboard', label: 'Dashboard', icon: <BookOpen className="w-4 h-4" /> },
+  { path: '/youth/profile', label: 'My Profile', icon: <Users className="w-4 h-4" /> },
+  { path: '/youth/courses', label: 'Courses', icon: <BookOpen className="w-4 h-4" /> },
+  { path: '/youth/my-courses', label: 'My Courses', icon: <BookOpen className="w-4 h-4" /> },
 ];
 
 const Courses = () => {
@@ -46,9 +46,10 @@ const Courses = () => {
   return (
     <DashboardLayout sidebarLinks={youthSidebarLinks}>
       <div className="space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Browse Courses</h1>
-          <p className="text-gray-600">Learn new skills and advance your career</p>
+        <div className="border-b border-stone-100 pb-8 mb-8">
+          <p className="text-[10px] uppercase tracking-luxury text-stone-400 mb-2">Learning</p>
+          <h1 className="font-display font-light text-stone-900 text-4xl" style={{ letterSpacing: '-0.022em' }}>Browse Courses</h1>
+          <p className="text-stone-400 text-sm mt-2">Learn new skills and advance your career</p>
         </div>
 
         {/* Filters */}
@@ -60,7 +61,7 @@ const Courses = () => {
                   placeholder="Search courses..."
                   value={filters.search}
                   onChange={(e) => handleFilterChange('search', e.target.value)}
-                  icon={<Search className="w-5 h-5" />}
+                  icon={<Search className="w-4 h-4" />}
                 />
               </div>
               <Select
@@ -109,7 +110,7 @@ const Courses = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[...Array(6)].map((_, i) => (
               <Card key={i}>
-                <Skeleton className="h-48 rounded-t-lg" />
+                <Skeleton className="h-48" />
                 <CardContent className="pt-4">
                   <Skeleton className="h-6 mb-2" />
                   <Skeleton className="h-4 mb-4" />
@@ -126,7 +127,8 @@ const Courses = () => {
             {data.map((course) => (
               <Card
                 key={course._id}
-                className="hover:shadow-lg transition cursor-pointer"
+                hover
+                className="cursor-pointer"
                 onClick={() => navigate(`/youth/courses/${course._id}`)}
               >
                 <div className="relative">
@@ -134,15 +136,15 @@ const Courses = () => {
                     <img
                       src={course.thumbnail}
                       alt={course.title}
-                      className="w-full h-48 object-cover rounded-t-lg"
+                      className="w-full h-48 object-cover"
                     />
                   ) : (
-                    <div className="w-full h-48 bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center rounded-t-lg">
-                      <BookOpen className="w-16 h-16 text-white opacity-50" />
+                    <div className="w-full h-48 bg-stone-100 flex items-center justify-center">
+                      <BookOpen className="w-16 h-16 text-stone-300" />
                     </div>
                   )}
                   {course.price === 0 && (
-                    <span className="absolute top-3 right-3 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                    <span className="absolute top-3 right-3 bg-green-500 text-white px-3 py-1 text-sm font-light">
                       Free
                     </span>
                   )}
@@ -150,16 +152,16 @@ const Courses = () => {
 
                 <CardContent className="pt-4">
                   <div className="flex items-start justify-between mb-2">
-                    <h3 className="text-lg font-semibold text-gray-900 line-clamp-2">
+                    <h3 className="font-light text-stone-900 text-lg line-clamp-2" style={{ letterSpacing: '-0.01em' }}>
                       {course.title}
                     </h3>
                   </div>
 
-                  <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+                  <p className="text-stone-400 text-sm mb-4 line-clamp-2">
                     {course.description}
                   </p>
 
-                  <div className="flex items-center gap-4 mb-3 text-sm text-gray-600">
+                  <div className="flex items-center gap-4 mb-3 text-sm text-stone-400">
                     <div className="flex items-center gap-1">
                       <Clock className="w-4 h-4" />
                       <span>{formatDuration(course.totalDuration)}</span>
@@ -182,11 +184,11 @@ const Courses = () => {
                   </div>
 
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600">
+                    <span className="text-sm text-stone-400">
                       By {course.instructor.name}
                     </span>
                     {course.price > 0 && (
-                      <span className="text-lg font-bold text-primary">
+                      <span className="font-display font-light text-primary text-lg">
                         {course.price.toLocaleString()} {course.currency}
                       </span>
                     )}

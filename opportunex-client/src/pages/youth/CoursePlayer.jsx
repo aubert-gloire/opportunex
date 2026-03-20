@@ -95,7 +95,7 @@ const CoursePlayer = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-white">
         <div className="max-w-7xl mx-auto p-6">
           <Skeleton className="h-96 mb-6" />
           <div className="flex gap-6">
@@ -109,9 +109,9 @@ const CoursePlayer = () => {
 
   if (!course || !enrollment) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
-          <p className="text-gray-600 mb-4">Course not found or you're not enrolled</p>
+          <p className="text-stone-400 text-sm mb-4">Course not found or you're not enrolled</p>
           <Button variant="primary" onClick={() => navigate('/youth/courses')}>
             Browse Courses
           </Button>
@@ -156,9 +156,9 @@ const CoursePlayer = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-white">
       {/* Top Navigation */}
-      <div className="bg-white border-b sticky top-0 z-10">
+      <div className="bg-white border-b border-stone-100 sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -167,23 +167,23 @@ const CoursePlayer = () => {
                 onClick={() => navigate('/youth/my-courses')}
                 className="flex items-center gap-2"
               >
-                <ChevronLeft className="w-5 h-5" />
+                <ChevronLeft className="w-4 h-4" />
                 Back
               </Button>
               <div>
-                <h1 className="text-xl font-bold text-gray-900">{course.title}</h1>
-                <p className="text-sm text-gray-600">
+                <h1 className="font-light text-stone-900" style={{ letterSpacing: '-0.01em' }}>{course.title}</h1>
+                <p className="text-xs text-stone-400">
                   Lesson {currentLessonIndex + 1} of {sortedLessons.length}
                 </p>
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <span className="text-sm font-medium text-gray-600">
+              <span className="text-xs text-stone-400">
                 {enrollment.progress}% Complete
               </span>
-              <div className="w-32 bg-gray-200 rounded-full h-2">
+              <div className="w-32 bg-stone-100 h-0.5">
                 <div
-                  className="bg-primary h-2 rounded-full transition-all"
+                  className="bg-primary h-0.5 transition-all"
                   style={{ width: `${enrollment.progress}%` }}
                 />
               </div>
@@ -200,17 +200,17 @@ const CoursePlayer = () => {
             <Card className="mb-6">
               {/* Video Player */}
               {currentLesson.videoUrl ? (
-                <div className="aspect-video bg-black rounded-t-lg">
+                <div className="aspect-video bg-black">
                   <iframe
                     src={currentLesson.videoUrl}
                     title={currentLesson.title}
-                    className="w-full h-full rounded-t-lg"
+                    className="w-full h-full"
                     allowFullScreen
                   />
                 </div>
               ) : (
-                <div className="aspect-video bg-gradient-to-br from-primary to-primary-dark rounded-t-lg flex items-center justify-center">
-                  <BookOpen className="w-24 h-24 text-white opacity-50" />
+                <div className="aspect-video bg-stone-900 flex items-center justify-center">
+                  <BookOpen className="w-24 h-24 text-white/20" />
                 </div>
               )}
 
@@ -218,10 +218,10 @@ const CoursePlayer = () => {
               <CardContent className="pt-6">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex-1">
-                    <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                    <h2 className="font-display font-light text-stone-900 text-2xl mb-2" style={{ letterSpacing: '-0.022em' }}>
                       {currentLesson.title}
                     </h2>
-                    <div className="flex items-center gap-4 text-sm text-gray-600">
+                    <div className="flex items-center gap-4 text-sm text-stone-400">
                       <div className="flex items-center gap-1">
                         <Clock className="w-4 h-4" />
                         <span>{currentLesson.duration} minutes</span>
@@ -238,23 +238,21 @@ const CoursePlayer = () => {
                       variant="success"
                       onClick={handleMarkComplete}
                       disabled={markCompleteMutation.isPending}
-                      className="flex items-center gap-2"
                     >
-                      <CheckCircle className="w-5 h-5" />
                       Mark Complete
                     </Button>
                   )}
                 </div>
 
-                <p className="text-gray-700 mb-6 whitespace-pre-wrap">
+                <p className="text-stone-500 text-sm mb-6 whitespace-pre-wrap">
                   {currentLesson.description}
                 </p>
 
                 {/* Lesson Content */}
                 {currentLesson.content && (
                   <div className="prose max-w-none mb-6">
-                    <div className="bg-gray-50 p-4 rounded-lg">
-                      <p className="text-gray-700 whitespace-pre-wrap">{currentLesson.content}</p>
+                    <div className="bg-stone-50 p-4">
+                      <p className="text-stone-500 text-sm whitespace-pre-wrap">{currentLesson.content}</p>
                     </div>
                   </div>
                 )}
@@ -262,8 +260,7 @@ const CoursePlayer = () => {
                 {/* Resources */}
                 {currentLesson.resources && currentLesson.resources.length > 0 && (
                   <div className="mb-6">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                      <FileText className="w-5 h-5" />
+                    <h3 className="text-[10px] uppercase tracking-label text-stone-400 mb-2.5 flex items-center gap-2">
                       Lesson Resources
                     </h3>
                     <div className="space-y-2">
@@ -273,14 +270,14 @@ const CoursePlayer = () => {
                           href={resource.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition"
+                          className="flex items-center justify-between p-3 bg-stone-50 hover:bg-stone-100 transition-colors"
                         >
                           <div className="flex items-center gap-2">
-                            <FileText className="w-5 h-5 text-primary" />
-                            <span className="text-gray-900">{resource.title}</span>
+                            <FileText className="w-4 h-4 text-primary" />
+                            <span className="text-stone-900 text-sm font-light">{resource.title}</span>
                             <Badge variant="secondary">{resource.type}</Badge>
                           </div>
-                          <ExternalLink className="w-4 h-4 text-gray-400" />
+                          <ExternalLink className="w-4 h-4 text-stone-400" />
                         </a>
                       ))}
                     </div>
@@ -288,14 +285,14 @@ const CoursePlayer = () => {
                 )}
 
                 {/* Navigation */}
-                <div className="flex items-center justify-between pt-6 border-t">
+                <div className="flex items-center justify-between pt-6 border-t border-stone-100">
                   <Button
                     variant="outline"
                     onClick={handlePreviousLesson}
                     disabled={isFirstLesson}
                     className="flex items-center gap-2"
                   >
-                    <ChevronLeft className="w-5 h-5" />
+                    <ChevronLeft className="w-4 h-4" />
                     Previous Lesson
                   </Button>
                   <Button
@@ -305,7 +302,7 @@ const CoursePlayer = () => {
                     className="flex items-center gap-2"
                   >
                     Next Lesson
-                    <ChevronRight className="w-5 h-5" />
+                    <ChevronRight className="w-4 h-4" />
                   </Button>
                 </div>
               </CardContent>
@@ -313,24 +310,19 @@ const CoursePlayer = () => {
 
             {/* Course Completion */}
             {enrollment.status === 'completed' && (
-              <Card className="bg-gradient-to-r from-green-500 to-green-600 text-white">
+              <Card className="border-green-200 bg-green-50">
                 <CardContent className="pt-6">
                   <div className="flex items-center gap-4">
-                    <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center">
-                      <Award className="w-10 h-10" />
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-2xl font-bold mb-1">Congratulations!</h3>
-                      <p className="text-white/90">
+                    <div>
+                      <h3 className="font-display font-light text-stone-900 text-xl mb-1" style={{ letterSpacing: '-0.01em' }}>Congratulations!</h3>
+                      <p className="text-stone-500 text-sm">
                         You've completed this course. Your certificate is ready!
                       </p>
                     </div>
                     <Button
                       variant="accent"
                       onClick={() => setShowRatingModal(true)}
-                      className="flex items-center gap-2"
                     >
-                      <Star className="w-5 h-5" />
                       Rate Course
                     </Button>
                   </div>
@@ -343,16 +335,13 @@ const CoursePlayer = () => {
           <div className="lg:w-80">
             <Card className="sticky top-24">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <BookOpen className="w-5 h-5" />
-                  Course Content
-                </CardTitle>
-                <p className="text-sm text-gray-600">
+                <CardTitle>Course Content</CardTitle>
+                <p className="text-xs text-stone-400">
                   {enrollment.completedLessons?.length || 0} / {sortedLessons.length} completed
                 </p>
               </CardHeader>
               <CardContent>
-                <div className="space-y-2 max-h-[600px] overflow-y-auto">
+                <div className="space-y-0 max-h-[600px] overflow-y-auto">
                   {sortedLessons.map((lesson, index) => {
                     const completed = isLessonCompleted(lesson._id);
                     const isCurrent = index === currentLessonIndex;
@@ -361,28 +350,28 @@ const CoursePlayer = () => {
                       <div
                         key={lesson._id}
                         onClick={() => setCurrentLessonIndex(index)}
-                        className={`p-3 rounded-lg cursor-pointer transition ${isCurrent
-                            ? 'bg-primary text-white'
+                        className={`p-3 cursor-pointer transition-colors border-b border-stone-50 ${isCurrent
+                            ? 'bg-primary/5 border-l-2 border-l-primary'
                             : completed
-                              ? 'bg-green-50 hover:bg-green-100'
-                              : 'bg-gray-50 hover:bg-gray-100'
+                              ? 'bg-green-50/50 hover:bg-green-50'
+                              : 'hover:bg-stone-50'
                           }`}
                       >
                         <div className="flex items-start gap-2">
-                          <div className="flex-shrink-0 mt-1">
+                          <div className="flex-shrink-0 mt-0.5">
                             {completed ? (
-                              <CheckCircle className={`w-5 h-5 ${isCurrent ? 'text-white' : 'text-green-500'}`} />
+                              <CheckCircle className={`w-4 h-4 ${isCurrent ? 'text-primary' : 'text-green-500'}`} />
                             ) : (
-                              <Circle className={`w-5 h-5 ${isCurrent ? 'text-white' : 'text-gray-400'}`} />
+                              <Circle className={`w-4 h-4 ${isCurrent ? 'text-primary' : 'text-stone-300'}`} />
                             )}
                           </div>
                           <div className="flex-1 min-w-0">
-                            <p className={`text-sm font-medium mb-1 ${isCurrent ? 'text-white' : 'text-gray-900'}`}>
+                            <p className={`text-sm font-light mb-0.5 ${isCurrent ? 'text-primary' : 'text-stone-900'}`}>
                               {index + 1}. {lesson.title}
                             </p>
-                            <div className="flex items-center gap-2">
-                              <Clock className={`w-3 h-3 ${isCurrent ? 'text-white/70' : 'text-gray-500'}`} />
-                              <span className={`text-xs ${isCurrent ? 'text-white/70' : 'text-gray-500'}`}>
+                            <div className="flex items-center gap-1">
+                              <Clock className="w-3 h-3 text-stone-400" />
+                              <span className="text-xs text-stone-400">
                                 {lesson.duration} min
                               </span>
                             </div>
@@ -406,14 +395,14 @@ const CoursePlayer = () => {
       >
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-[10px] uppercase tracking-label text-stone-400 mb-2.5">
               Your Rating
             </label>
             <Rating rating={rating} onChange={setRating} size="lg" readonly={false} showNumber={false} />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-[10px] uppercase tracking-label text-stone-400 mb-2.5">
               Your Review (Optional)
             </label>
             <Textarea

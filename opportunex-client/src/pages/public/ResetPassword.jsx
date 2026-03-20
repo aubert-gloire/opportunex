@@ -8,7 +8,6 @@ import { authAPI } from '@/api';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import Card from '@/components/ui/Card';
-import { KeyRound } from 'lucide-react';
 
 const resetPasswordSchema = z.object({
   password: z.string().min(6, 'Password must be at least 6 characters'),
@@ -45,14 +44,12 @@ const ResetPassword = () => {
   };
 
   return (
-    <div className="min-h-[calc(100vh-64px)] flex items-center justify-center bg-gray-50 py-12 px-4">
+    <div className="min-h-[calc(100vh-64px)] flex items-center justify-center bg-white py-12 px-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-primary rounded-2xl mb-4">
-            <KeyRound className="w-8 h-8 text-white" />
-          </div>
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">Reset Your Password</h2>
-          <p className="text-gray-600">Enter your new password below</p>
+          <p className="text-[10px] uppercase tracking-luxury text-stone-400 mb-4">Security</p>
+          <h2 className="font-display font-light text-stone-900 text-3xl mb-2" style={{ letterSpacing: '-0.022em' }}>Reset Your Password</h2>
+          <p className="text-stone-400 text-sm">Enter your new password below</p>
         </div>
 
         <Card>

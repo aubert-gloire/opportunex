@@ -28,12 +28,12 @@ import { formatDate, formatCurrency, sectorIcons } from '@/utils/helpers';
 import { SECTORS, JOB_TYPES } from '@/utils/constants';
 
 const youthSidebarLinks = [
-  { path: '/youth/dashboard', label: 'Dashboard', icon: <LayoutDashboard className="w-5 h-5" /> },
-  { path: '/youth/jobs', label: 'Find Jobs', icon: <Briefcase className="w-5 h-5" /> },
-  { path: '/youth/applications', label: 'My Applications', icon: <FileText className="w-5 h-5" /> },
-  { path: '/youth/mentorship', label: 'Mentorship', icon: <Users className="w-5 h-5" /> },
-  { path: '/youth/skill-tests', label: 'Skill Tests', icon: <GraduationCap className="w-5 h-5" /> },
-  { path: '/youth/profile', label: 'My Profile', icon: <User className="w-5 h-5" /> },
+  { path: '/youth/dashboard', label: 'Dashboard', icon: <LayoutDashboard className="w-4 h-4" /> },
+  { path: '/youth/jobs', label: 'Find Jobs', icon: <Briefcase className="w-4 h-4" /> },
+  { path: '/youth/applications', label: 'My Applications', icon: <FileText className="w-4 h-4" /> },
+  { path: '/youth/mentorship', label: 'Mentorship', icon: <Users className="w-4 h-4" /> },
+  { path: '/youth/skill-tests', label: 'Skill Tests', icon: <GraduationCap className="w-4 h-4" /> },
+  { path: '/youth/profile', label: 'My Profile', icon: <User className="w-4 h-4" /> },
 ];
 
 const JobSearch = () => {
@@ -90,9 +90,10 @@ const JobSearch = () => {
   return (
     <DashboardLayout sidebarLinks={youthSidebarLinks}>
       <div className="space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Find Jobs</h1>
-          <p className="text-gray-600">Discover opportunities that match your skills</p>
+        <div className="border-b border-stone-100 pb-8 mb-8">
+          <p className="text-[10px] uppercase tracking-luxury text-stone-400 mb-2">Opportunities</p>
+          <h1 className="font-display font-light text-stone-900 text-4xl" style={{ letterSpacing: '-0.022em' }}>Find Jobs</h1>
+          <p className="text-stone-400 text-sm mt-2">Discover opportunities that match your skills</p>
         </div>
 
         {/* Search and Filters */}
@@ -125,7 +126,6 @@ const JobSearch = () => {
                 className="flex-1"
               />
               <Button variant="primary" onClick={handleSearch}>
-                <Search className="w-4 h-4 mr-2" />
                 Search
               </Button>
             </div>
@@ -147,7 +147,7 @@ const JobSearch = () => {
           />
         ) : (
           <div className="space-y-4">
-            <div className="text-sm text-gray-600">
+            <div className="text-sm text-stone-400">
               Showing {jobsData?.jobs.length} of {jobsData?.count} opportunities
             </div>
             {jobsData?.jobs.map((job) => (
@@ -159,10 +159,10 @@ const JobSearch = () => {
                       <img
                         src={job.companyLogo}
                         alt={job.companyName}
-                        className="w-16 h-16 object-cover rounded-lg"
+                        className="w-16 h-16 object-cover"
                       />
                     ) : (
-                      <div className="w-16 h-16 bg-gradient-to-br from-primary to-accent rounded-lg flex items-center justify-center text-white font-bold text-xl">
+                      <div className="w-16 h-16 bg-stone-100 flex items-center justify-center text-stone-600 font-light text-xl">
                         {job.companyName?.charAt(0)}
                       </div>
                     )}
@@ -171,11 +171,11 @@ const JobSearch = () => {
                   {/* Job Info */}
                   <div className="flex-1 min-w-0">
                     <Link to={`/jobs/${job._id}`}>
-                      <h3 className="text-xl font-bold text-gray-900 mb-1 hover:text-primary transition-colors">
+                      <h3 className="text-lg font-light text-stone-900 mb-1 hover:text-primary transition-colors" style={{ letterSpacing: '-0.01em' }}>
                         {job.title}
                       </h3>
                     </Link>
-                    <p className="text-gray-600 mb-3 flex items-center gap-2">
+                    <p className="text-stone-400 text-sm mb-3 flex items-center gap-2">
                       <Building2 className="w-4 h-4" />
                       {job.companyName}
                     </p>
@@ -195,7 +195,7 @@ const JobSearch = () => {
                     </div>
 
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-500">
+                      <span className="text-sm text-stone-400">
                         Posted {formatDate(job.createdAt)}
                       </span>
                       <Button variant="accent" size="sm" onClick={() => handleApply(job)}>
@@ -244,8 +244,8 @@ const JobSearch = () => {
           {selectedJob && (
             <div className="space-y-4">
               <div>
-                <h3 className="text-xl font-bold text-gray-900">{selectedJob.title}</h3>
-                <p className="text-gray-600">{selectedJob.companyName}</p>
+                <h3 className="font-light text-stone-900 text-xl" style={{ letterSpacing: '-0.01em' }}>{selectedJob.title}</h3>
+                <p className="text-stone-400 text-sm">{selectedJob.companyName}</p>
               </div>
 
               <Textarea
@@ -256,8 +256,8 @@ const JobSearch = () => {
                 onChange={(e) => setCoverLetter(e.target.value)}
               />
 
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <p className="text-sm text-gray-700">
+              <div className="bg-stone-50 border border-stone-100 p-4">
+                <p className="text-sm text-stone-500">
                   Your CV from your profile will be automatically attached. Make sure your profile is up to date!
                 </p>
               </div>

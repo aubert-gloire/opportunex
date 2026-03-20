@@ -12,18 +12,25 @@ const Select = forwardRef(({
   return (
     <div className="w-full">
       {label && (
-        <label className="block text-sm font-semibold text-gray-700 mb-2 tracking-wide">
+        <label className="block text-[10px] uppercase tracking-label text-stone-400 font-medium mb-2.5">
           {label}
-          {required && <span className="text-red-500 ml-1">*</span>}
+          {required && <span className="text-red-400 ml-1">*</span>}
         </label>
       )}
       <select
         ref={ref}
-        className={`w-full px-4 py-3 text-base rounded-lg border ${error ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-primary'
-          } focus:outline-none focus:ring-2 focus:border-transparent transition-all ${className}`}
+        className={`w-full px-0 py-3 text-sm bg-transparent
+          border-0 border-b transition-colors duration-150
+          focus:outline-none focus:ring-0
+          appearance-none cursor-pointer
+          ${error
+            ? 'border-red-400 text-red-900 focus:border-red-600'
+            : 'border-stone-200 text-stone-900 focus:border-stone-900'
+          }
+          ${className}`}
         {...props}
       >
-        <option value="">{placeholder}</option>
+        <option value="" className="text-stone-300">{placeholder}</option>
         {options.map((option) => (
           <option
             key={typeof option === 'string' ? option : option.value}
@@ -33,7 +40,7 @@ const Select = forwardRef(({
           </option>
         ))}
       </select>
-      {error && <p className="mt-2 text-sm text-red-600 font-medium">{error}</p>}
+      {error && <p className="mt-1.5 text-[11px] text-red-500">{error}</p>}
     </div>
   );
 });

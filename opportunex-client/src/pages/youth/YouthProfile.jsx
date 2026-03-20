@@ -26,12 +26,12 @@ import { UNIVERSITIES, SECTORS } from '@/utils/constants';
 import { useAuth } from '@/context/AuthContext';
 
 const youthSidebarLinks = [
-  { path: '/youth/dashboard', label: 'Dashboard', icon: <LayoutDashboard className="w-5 h-5" /> },
-  { path: '/youth/jobs', label: 'Find Jobs', icon: <Briefcase className="w-5 h-5" /> },
-  { path: '/youth/applications', label: 'My Applications', icon: <FileText className="w-5 h-5" /> },
-  { path: '/youth/mentorship', label: 'Mentorship', icon: <Users className="w-5 h-5" /> },
-  { path: '/youth/skill-tests', label: 'Skill Tests', icon: <GraduationCap className="w-5 h-5" /> },
-  { path: '/youth/profile', label: 'My Profile', icon: <User className="w-5 h-5" /> },
+  { path: '/youth/dashboard', label: 'Dashboard', icon: <LayoutDashboard className="w-4 h-4" /> },
+  { path: '/youth/jobs', label: 'Find Jobs', icon: <Briefcase className="w-4 h-4" /> },
+  { path: '/youth/applications', label: 'My Applications', icon: <FileText className="w-4 h-4" /> },
+  { path: '/youth/mentorship', label: 'Mentorship', icon: <Users className="w-4 h-4" /> },
+  { path: '/youth/skill-tests', label: 'Skill Tests', icon: <GraduationCap className="w-4 h-4" /> },
+  { path: '/youth/profile', label: 'My Profile', icon: <User className="w-4 h-4" /> },
 ];
 
 const YouthProfile = () => {
@@ -120,9 +120,10 @@ const YouthProfile = () => {
   return (
     <DashboardLayout sidebarLinks={youthSidebarLinks}>
       <div className="space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">My Profile</h1>
-          <p className="text-gray-600">Manage your professional profile</p>
+        <div className="border-b border-stone-100 pb-8 mb-8">
+          <p className="text-[10px] uppercase tracking-luxury text-stone-400 mb-2">Account</p>
+          <h1 className="font-display font-light text-stone-900 text-4xl" style={{ letterSpacing: '-0.022em' }}>My Profile</h1>
+          <p className="text-stone-400 text-sm mt-2">Manage your professional profile</p>
         </div>
 
         {/* Profile Header */}
@@ -137,7 +138,7 @@ const YouthProfile = () => {
               />
               <label
                 htmlFor="avatar-upload"
-                className="absolute bottom-0 right-0 bg-accent text-white p-2 rounded-full cursor-pointer hover:bg-accent-600 transition-colors"
+                className="absolute bottom-0 right-0 bg-accent text-white p-2 cursor-pointer hover:bg-accent-600 transition-colors"
               >
                 <Upload className="w-4 h-4" />
                 <input
@@ -152,10 +153,10 @@ const YouthProfile = () => {
             </div>
 
             <div className="flex-1">
-              <h2 className="text-2xl font-bold text-gray-900">
+              <h2 className="font-display font-light text-stone-900 text-2xl" style={{ letterSpacing: '-0.022em' }}>
                 {user?.firstName} {user?.lastName}
               </h2>
-              <p className="text-gray-600">{profile?.major || 'Student'}</p>
+              <p className="text-stone-400 text-sm">{profile?.major || 'Student'}</p>
               <div className="mt-2">
                 <Badge variant="info">
                   Profile {profile?.profileCompletionPercentage || 0}% Complete
@@ -236,11 +237,11 @@ const YouthProfile = () => {
           </CardHeader>
           <CardContent>
             {profile?.cv ? (
-              <div className="flex items-center justify-between p-4 bg-green-50 border border-green-200 rounded-lg">
+              <div className="flex items-center justify-between p-4 bg-green-50 border border-green-200">
                 <div className="flex items-center gap-3">
                   <FileText className="w-6 h-6 text-green-600" />
                   <div>
-                    <p className="font-medium text-gray-900">CV Uploaded</p>
+                    <p className="font-medium text-stone-900">CV Uploaded</p>
                     <a
                       href={profile.cv}
                       target="_blank"
@@ -265,12 +266,11 @@ const YouthProfile = () => {
                 </label>
               </div>
             ) : (
-              <div className="text-center py-8 border-2 border-dashed border-gray-300 rounded-lg">
-                <FileText className="w-12 h-12 text-gray-400 mx-auto mb-3" />
-                <p className="text-gray-600 mb-4">No CV uploaded yet</p>
+              <div className="text-center py-8 border-2 border-dashed border-stone-200">
+                <FileText className="w-12 h-12 text-stone-400 mx-auto mb-3" />
+                <p className="text-stone-400 text-sm mb-4">No CV uploaded yet</p>
                 <label htmlFor="cv-upload">
                   <Button variant="primary" disabled={uploading}>
-                    <Upload className="w-4 h-4 mr-2" />
                     Upload CV
                   </Button>
                   <input
@@ -313,7 +313,7 @@ const YouthProfile = () => {
                     }
                   }}
                 >
-                  <Plus className="w-4 h-4" />
+                  Add
                 </Button>
               </div>
 
@@ -340,19 +340,18 @@ const YouthProfile = () => {
 
             {/* Verified Skills */}
             {profile?.verifiedSkills && profile.verifiedSkills.length > 0 && (
-              <div className="mt-6 pt-6 border-t border-gray-200">
-                <h4 className="font-semibold text-gray-900 mb-3">Verified Skills</h4>
+              <div className="mt-6 pt-6 border-t border-stone-100">
+                <h4 className="text-[10px] uppercase tracking-label text-stone-400 mb-2.5">Verified Skills</h4>
                 <div className="space-y-2">
                   {profile.verifiedSkills.map((vs, index) => (
                     <div
                       key={index}
-                      className="flex items-center justify-between p-3 bg-green-50 border border-green-200 rounded-lg"
+                      className="flex items-center justify-between p-3 bg-green-50 border border-green-200"
                     >
                       <div className="flex items-center gap-3">
-                        <GraduationCap className="w-5 h-5 text-green-600" />
                         <div>
-                          <p className="font-medium text-gray-900">{vs.skill}</p>
-                          <p className="text-sm text-gray-600">Score: {vs.score}%</p>
+                          <p className="font-medium text-stone-900">{vs.skill}</p>
+                          <p className="text-sm text-stone-400">Score: {vs.score}%</p>
                         </div>
                       </div>
                       <Badge variant="success">{vs.badge}</Badge>
