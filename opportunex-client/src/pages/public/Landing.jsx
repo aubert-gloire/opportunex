@@ -153,7 +153,7 @@ const Landing = () => {
               {
                 n:     '03',
                 title: 'Get Matched & Apply',
-                desc:  'Receive curated job recommendations and connect directly with Rwanda's top employers.',
+                desc:  "Receive curated job recommendations and connect directly with Rwanda's top employers.",
               },
             ].map(({ n, title, desc }) => (
               <motion.div

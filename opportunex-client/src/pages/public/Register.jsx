@@ -152,6 +152,7 @@ const Register = () => {
 
           {/* Form */}
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-7">
+            <input type="hidden" {...register('role')} />
 
             <div className="grid grid-cols-2 gap-6">
               <Input
