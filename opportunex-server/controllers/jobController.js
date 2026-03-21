@@ -3,6 +3,7 @@ import Job from '../models/Job.js';
 import EmployerProfile from '../models/EmployerProfile.js';
 import YouthProfile from '../models/YouthProfile.js';
 import Application from '../models/Application.js';
+import { rwfToUsd } from '../utils/currency.js';
 
 // @desc    Get all jobs with filters
 // @route   GET /api/jobs
@@ -45,14 +46,19 @@ export const getJobs = async (req, res) => {
       .skip((page - 1) * limit)
       .lean();
 
-    // Get employer profiles for company names
+    // Get employer profiles for company names + USD salary conversion
     const jobsWithCompany = await Promise.all(
       jobs.map(async (job) => {
-        const employerProfile = await EmployerProfile.findOne({ user: job.employer._id }).lean();
+        const [employerProfile, salaryMinUsd, salaryMaxUsd] = await Promise.all([
+          EmployerProfile.findOne({ user: job.employer._id }).lean(),
+          rwfToUsd(job.salaryRange?.min),
+          rwfToUsd(job.salaryRange?.max),
+        ]);
         return {
           ...job,
           companyName: employerProfile?.companyName || 'Company',
           companyLogo: employerProfile?.logo || '',
+          salaryUsd: (salaryMinUsd || salaryMaxUsd) ? { min: salaryMinUsd, max: salaryMaxUsd } : null,
         };
       })
     );
@@ -95,8 +101,12 @@ export const getJob = async (req, res) => {
     job.views += 1;
     await job.save();
 
-    // Get employer profile
-    const employerProfile = await EmployerProfile.findOne({ user: job.employer._id });
+    // Get employer profile + USD salary
+    const [employerProfile, salaryMinUsd, salaryMaxUsd] = await Promise.all([
+      EmployerProfile.findOne({ user: job.employer._id }),
+      rwfToUsd(job.salaryRange?.min),
+      rwfToUsd(job.salaryRange?.max),
+    ]);
 
     res.json({
       success: true,
@@ -105,6 +115,7 @@ export const getJob = async (req, res) => {
         companyName: employerProfile?.companyName || 'Company',
         companyLogo: employerProfile?.logo || '',
         companyDescription: employerProfile?.description || '',
+        salaryUsd: (salaryMinUsd || salaryMaxUsd) ? { min: salaryMinUsd, max: salaryMaxUsd } : null,
       },
     });
   } catch (error) {

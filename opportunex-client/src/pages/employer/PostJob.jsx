@@ -14,8 +14,9 @@ import {
   CreditCard,
   Plus,
   X,
+  Sparkles,
 } from 'lucide-react';
-import { jobAPI } from '@/api';
+import { jobAPI, aiAPI } from '@/api';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import Card, { CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
@@ -49,10 +50,13 @@ const PostJob = () => {
   const navigate = useNavigate();
   const [requirements, setRequirements] = useState(['']);
   const [skills, setSkills] = useState(['']);
+  const [aiGenerating, setAiGenerating] = useState(false);
 
   const {
     register,
     handleSubmit,
+    watch,
+    setValue,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(jobSchema),
@@ -61,6 +65,37 @@ const PostJob = () => {
       location: 'Kigali',
     },
   });
+
+  const handleGenerateDescription = async () => {
+    const values = watch ? watch() : {};
+    const title = values.title;
+    const type = values.type;
+    const sector = values.sector;
+
+    if (!title || title.length < 3) {
+      toast.error('Enter a job title first');
+      return;
+    }
+
+    setAiGenerating(true);
+    try {
+      const { data } = await aiAPI.generateJobDescription({
+        title,
+        type,
+        sector,
+        requirements: requirements.filter(Boolean),
+        skills: skills.filter(Boolean),
+      });
+      if (data.description) {
+        setValue('description', data.description);
+        toast.success('Description generated');
+      }
+    } catch {
+      toast.error('AI generation failed — add GEMINI_API_KEY to server .env');
+    } finally {
+      setAiGenerating(false);
+    }
+  };
 
   const createJobMutation = useMutation({
     mutationFn: (data) => jobAPI.createJob(data),
@@ -124,7 +159,7 @@ const PostJob = () => {
       <div className="max-w-4xl space-y-6">
         <div className="border-b border-stone-100 pb-8 mb-8">
           <p className="text-[10px] uppercase tracking-luxury text-stone-400 mb-2">Recruiting</p>
-          <h1 className="font-display font-light text-stone-900 text-4xl" style={{ letterSpacing: '-0.022em' }}>Post a Job</h1>
+          <h1 className="font-display font-light text-stone-900 text-3xl sm:text-4xl" style={{ letterSpacing: '-0.022em' }}>Post a Job</h1>
           <p className="text-stone-400 text-sm mt-2">Create a new job posting to attract top talent</p>
         </div>
 
@@ -140,14 +175,28 @@ const PostJob = () => {
                 required
               />
 
-              <Textarea
-                label="Job Description"
-                rows={8}
-                placeholder="Describe the role, responsibilities, and what makes your company great..."
-                error={errors.description?.message}
-                {...register('description')}
-                required
-              />
+              <div>
+                <div className="flex items-center justify-between mb-2.5">
+                  <label className="text-[10px] uppercase tracking-label text-stone-400">
+                    Job Description <span className="text-red-400">*</span>
+                  </label>
+                  <button
+                    type="button"
+                    onClick={handleGenerateDescription}
+                    disabled={aiGenerating}
+                    className="flex items-center gap-1.5 text-[10px] uppercase tracking-label text-primary border border-primary px-2.5 py-1 hover:bg-primary hover:text-white transition-colors disabled:opacity-40"
+                  >
+                    <Sparkles className="w-3 h-3" />
+                    {aiGenerating ? 'Generating…' : 'Generate with AI'}
+                  </button>
+                </div>
+                <Textarea
+                  rows={8}
+                  placeholder="Describe the role, responsibilities, and what makes your company great… or click Generate with AI."
+                  error={errors.description?.message}
+                  {...register('description')}
+                />
+              </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <Select

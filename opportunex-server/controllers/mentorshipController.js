@@ -3,6 +3,7 @@ import MentorshipSession from '../models/MentorshipSession.js';
 import User from '../models/User.js';
 import YouthProfile from '../models/YouthProfile.js';
 import { sendEmail, emailTemplates } from '../utils/sendEmail.js';
+import { sendSMS, smsTemplates } from '../utils/sendSMS.js';
 
 // @desc    Get available mentors
 // @route   GET /api/mentorship/mentors
@@ -62,7 +63,7 @@ export const requestMentorship = async (req, res) => {
       });
     }
 
-    // Create mentorship session
+    // Create mentorship session with auto-generated Jitsi meeting link (free, no key needed)
     const session = await MentorshipSession.create({
       mentor,
       mentee: req.user.id,
@@ -72,6 +73,10 @@ export const requestMentorship = async (req, res) => {
       notes,
       status: 'pending',
     });
+
+    // Auto-assign a Jitsi Meet room — completely free, works instantly
+    session.meetingLink = `https://meet.jit.si/opportunex-${session._id}`;
+    await session.save();
 
     // Send email to mentor
     const mentee = await User.findById(req.user.id);
@@ -170,6 +175,8 @@ export const updateSession = async (req, res) => {
       });
     }
 
+    const previousStatus = session.status;
+
     // Update allowed fields based on role
     if (req.body.status) session.status = req.body.status;
     if (req.body.meetingLink && isMentor) session.meetingLink = req.body.meetingLink;
@@ -178,6 +185,24 @@ export const updateSession = async (req, res) => {
     if (req.body.scheduledAt) session.scheduledAt = req.body.scheduledAt;
 
     await session.save();
+
+    // Notify mentee by SMS when mentor confirms the session
+    if (req.body.status === 'confirmed' && previousStatus !== 'confirmed') {
+      const [menteeUser, mentorUser] = await Promise.all([
+        User.findById(session.mentee).select('phone').lean(),
+        User.findById(session.mentor).select('firstName lastName').lean(),
+      ]);
+      if (menteeUser?.phone && mentorUser) {
+        sendSMS(
+          menteeUser.phone,
+          smsTemplates.mentorshipConfirmed(
+            `${mentorUser.firstName} ${mentorUser.lastName}`,
+            session.topic,
+            session.scheduledAt
+          )
+        ).catch(() => {});
+      }
+    }
 
     res.json({
       success: true,

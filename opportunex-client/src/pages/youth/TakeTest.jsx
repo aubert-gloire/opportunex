@@ -251,7 +251,7 @@ const TakeTest = () => {
                 className={`w-10 h-10 font-light text-sm transition-all ${index === currentQuestion
                     ? 'bg-primary text-white'
                     : answers[index] !== null
-                      ? 'bg-green-100 text-green-800'
+                      ? 'bg-[#6B9E78]/10 text-[#6B9E78]'
                       : 'bg-stone-100 text-stone-500 hover:bg-stone-200'
                   }`}
               >
@@ -274,9 +274,9 @@ const TakeTest = () => {
       >
         {testResults && (
           <div className="text-center space-y-6">
-            <div className={`w-24 h-24 mx-auto flex items-center justify-center ${testResults.passed ? 'bg-green-100' : 'bg-stone-100'
+            <div className={`w-24 h-24 mx-auto flex items-center justify-center ${testResults.passed ? 'bg-stone-50 border border-[#6B9E78]/30' : 'bg-stone-100'
               }`}>
-              <Award className={`w-12 h-12 ${testResults.passed ? 'text-green-600' : 'text-stone-400'}`} />
+              <Award className={`w-12 h-12 ${testResults.passed ? 'text-[#6B9E78]' : 'text-stone-400'}`} />
             </div>
 
             <div>
@@ -289,9 +289,9 @@ const TakeTest = () => {
             </div>
 
             {testResults.passed ? (
-              <div className="bg-green-50 border border-green-200 p-4">
-                <p className="text-green-900 font-light mb-2">You passed the test!</p>
-                <p className="text-green-700 text-sm">
+              <div className="border-l-2 border-[#6B9E78] bg-stone-50 pl-4 p-4">
+                <p className="text-stone-900 font-light mb-2">You passed the test!</p>
+                <p className="text-stone-500 text-sm">
                   A {testResults.badge} badge has been added to your profile
                 </p>
               </div>

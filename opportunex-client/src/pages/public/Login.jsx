@@ -7,6 +7,7 @@ import toast from 'react-hot-toast';
 import { useAuth } from '@/context/AuthContext';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
+import Logo from '@/components/ui/Logo';
 
 const loginSchema = z.object({
   email:    z.string().email('Invalid email address'),
@@ -54,9 +55,7 @@ const Login = () => {
         />
 
         <div className="relative z-10">
-          <span className="text-[10px] uppercase tracking-luxury text-white/40 font-medium">
-            OpportuneX
-          </span>
+          <Logo size="sm" variant="light" markOnly />
         </div>
 
         <div className="relative z-10">
@@ -82,9 +81,9 @@ const Login = () => {
       {/* ── Right form panel ──────────────────────────── */}
       <div className="flex-1 bg-white flex flex-col justify-center px-8 md:px-14 lg:px-20 py-14">
 
-        {/* Mobile wordmark */}
+        {/* Mobile logo */}
         <div className="lg:hidden mb-10">
-          <span className="font-display text-xl italic text-primary">OpportuneX</span>
+          <Logo size="sm" variant="dark" />
         </div>
 
         <div className="max-w-[380px] w-full mx-auto">

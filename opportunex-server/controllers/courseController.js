@@ -278,6 +278,13 @@ export const markLessonComplete = async (req, res) => {
     // Update progress
     await enrollment.updateProgress();
 
+    // Issue certificate when course is fully completed
+    if (enrollment.status === 'completed' && !enrollment.certificateIssued) {
+      enrollment.certificateIssued = true;
+      enrollment.certificateUrl = `/youth/certificate/${req.params.id}`;
+      await enrollment.save();
+    }
+
     res.json({
       success: true,
       message: 'Lesson marked as complete',
@@ -287,6 +294,51 @@ export const markLessonComplete = async (req, res) => {
     res.status(400).json({
       success: false,
       message: 'Error marking lesson complete',
+      error: error.message,
+    });
+  }
+};
+
+// @desc    Get certificate data for a completed course
+// @route   GET /api/courses/:id/certificate
+// @access  Private (Youth)
+export const getCertificate = async (req, res) => {
+  try {
+    const enrollment = await CourseEnrollment.findOne({
+      user: req.user._id,
+      course: req.params.id,
+      status: 'completed',
+    }).populate('course', 'title description instructor skills level category');
+
+    if (!enrollment) {
+      return res.status(404).json({
+        success: false,
+        message: 'Certificate not found. Complete the course first.',
+      });
+    }
+
+    const User = (await import('../models/User.js')).default;
+    const student = await User.findById(req.user._id).select('firstName lastName');
+
+    const instructorName = enrollment.course.instructor?.name || 'OpportuneX';
+
+    res.json({
+      success: true,
+      certificate: {
+        id: enrollment._id,
+        studentName: `${student.firstName} ${student.lastName}`,
+        courseTitle: enrollment.course.title,
+        courseLevel: enrollment.course.level,
+        skills: enrollment.course.skills || [],
+        instructorName,
+        completedAt: enrollment.completedAt,
+        issuedAt: new Date(),
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching certificate',
       error: error.message,
     });
   }

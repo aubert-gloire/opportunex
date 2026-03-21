@@ -20,6 +20,7 @@ export const userAPI = {
     headers: { 'Content-Type': 'multipart/form-data' },
   }),
   changePassword: (data) => api.put('/users/change-password', data),
+  searchTalent: (params) => api.get('/users/talent', { params }),
   getPublicProfile: (id) => api.get(`/users/${id}/public`),
 };
 
@@ -78,6 +79,7 @@ export const reviewAPI = {
 export const paymentAPI = {
   subscribe: (data) => api.post('/payments/subscribe', data),
   payForJobPosting: (data) => api.post('/payments/job-posting', data),
+  verifyPayment: (data) => api.post('/payments/verify', data),
   getMyPayments: (params) => api.get('/payments/my-payments', { params }),
   getPayment: (id) => api.get(`/payments/${id}`),
 };
@@ -90,6 +92,35 @@ export const adminAPI = {
   getAnalytics: () => api.get('/admin/analytics'),
   getReports: (params) => api.get('/admin/reports', { params }),
   deleteUser: (id) => api.delete(`/admin/users/${id}`),
+};
+
+// AI API
+export const aiAPI = {
+  generateJobDescription: (data) => api.post('/ai/job-description', data),
+  generateCoverLetter:    (data) => api.post('/ai/cover-letter', data),
+  getInterviewPrep:       (data) => api.post('/ai/interview-prep', data),
+  getCareerTips:          ()     => api.get('/ai/career-tips'),
+  getCVFeedback:          ()     => api.get('/ai/cv-feedback'),
+  explainConcept:         (data) => api.post('/ai/explain-concept', data),
+  getMentorshipAgenda:    (data) => api.post('/ai/mentorship-agenda', data),
+  getSessionSummary:      (data) => api.post('/ai/session-summary', data),
+};
+
+// External Jobs / YouTube / Books API
+export const externalAPI = {
+  getJobs:       (params) => api.get('/external/jobs', { params }),
+  searchYouTube: (params) => api.get('/external/youtube', { params }),
+  searchBooks:   (params) => api.get('/external/books', { params }),
+};
+
+// Assignment API
+export const assignmentAPI = {
+  getLessonAssignments: (courseId, lessonId) => api.get(`/assignments/course/${courseId}/lesson/${lessonId}`),
+  submitAssignment:     (id, data)           => api.post(`/assignments/${id}/submit`, data),
+  getMySubmissions:     (courseId)           => api.get(`/assignments/my-submissions/${courseId}`),
+  createAssignment:     (data)               => api.post('/assignments', data),
+  generateAssignment:   (data)               => api.post('/assignments/generate', data),
+  deleteAssignment:     (id)                 => api.delete(`/assignments/${id}`),
 };
 
 // Course API
@@ -105,4 +136,5 @@ export const courseAPI = {
   markLessonComplete: (courseId, lessonId) => api.post(`/courses/${courseId}/lessons/${lessonId}/complete`),
   getCourseProgress: (id) => api.get(`/courses/${id}/progress`),
   rateCourse: (id, data) => api.post(`/courses/${id}/rate`, data),
+  getCertificate: (id) => api.get(`/courses/${id}/certificate`),
 };

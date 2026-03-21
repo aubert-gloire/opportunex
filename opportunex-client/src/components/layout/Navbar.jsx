@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import Avatar from '../ui/Avatar';
 import Button from '../ui/Button';
+import Logo from '../ui/Logo';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -28,9 +29,9 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
         <div className="flex justify-between items-center h-14">
 
-          {/* Wordmark */}
-          <Link to="/" className="font-display text-xl italic text-primary tracking-tight">
-            OpportuneX
+          {/* Logo */}
+          <Link to="/" className="flex items-center">
+            <Logo size="sm" variant="dark" />
           </Link>
 
           {/* Desktop Navigation */}
@@ -113,9 +114,21 @@ const Navbar = () => {
                 <Link to={getDashboardLink()} className="flex items-center gap-2 py-2.5 text-[11px] uppercase tracking-label text-stone-500" onClick={() => setIsMenuOpen(false)}>
                   <LayoutDashboard className="w-3.5 h-3.5" />Dashboard
                 </Link>
-                <button onClick={handleLogout} className="flex items-center gap-2 py-2.5 text-[11px] uppercase tracking-label text-red-500 w-full">
-                  <LogOut className="w-3.5 h-3.5" />Sign Out
-                </button>
+                {user?.role === 'youth' && (
+                  <Link to="/youth/jobs" className="flex items-center gap-2 py-2.5 text-[11px] uppercase tracking-label text-stone-500" onClick={() => setIsMenuOpen(false)}>
+                    Find Jobs
+                  </Link>
+                )}
+                {user?.role === 'employer' && (
+                  <Link to="/employer/post-job" className="flex items-center gap-2 py-2.5 text-[11px] uppercase tracking-label text-stone-500" onClick={() => setIsMenuOpen(false)}>
+                    Post a Job
+                  </Link>
+                )}
+                <div className="pt-2 border-t border-stone-100">
+                  <button onClick={handleLogout} className="flex items-center gap-2 py-2.5 text-[11px] uppercase tracking-label text-red-400 w-full">
+                    <LogOut className="w-3.5 h-3.5" />Sign Out
+                  </button>
+                </div>
               </>
             )}
           </div>

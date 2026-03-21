@@ -42,6 +42,7 @@ const ViewApplications = () => {
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [newStatus, setNewStatus] = useState('');
   const [employerNotes, setEmployerNotes] = useState('');
+  const [interviewDate, setInterviewDate] = useState('');
 
   const { data: applicationsData, isLoading, refetch } = useQuery({
     queryKey: ['jobApplications', jobId, statusFilter],
@@ -60,10 +61,11 @@ const ViewApplications = () => {
 
   const handleUpdateStatus = async () => {
     try {
-      await applicationAPI.updateApplicationStatus(selectedApp._id, {
-        status: newStatus,
-        employerNotes,
-      });
+      const payload = { status: newStatus, employerNotes };
+      if (newStatus === 'interview' && interviewDate) {
+        payload.interviewDate = interviewDate;
+      }
+      await applicationAPI.updateApplicationStatus(selectedApp._id, payload);
       toast.success('Application updated successfully');
       setShowDetailModal(false);
       refetch();
@@ -77,7 +79,7 @@ const ViewApplications = () => {
       <div className="space-y-6">
         <div className="border-b border-stone-100 pb-8 mb-8">
           <p className="text-[10px] uppercase tracking-luxury text-stone-400 mb-2">Recruiting</p>
-          <h1 className="font-display font-light text-stone-900 text-4xl" style={{ letterSpacing: '-0.022em' }}>Applications</h1>
+          <h1 className="font-display font-light text-stone-900 text-3xl sm:text-4xl" style={{ letterSpacing: '-0.022em' }}>Applications</h1>
           <p className="text-stone-400 text-sm mt-2">Review and manage applicants</p>
         </div>
 
@@ -150,7 +152,7 @@ const ViewApplications = () => {
                     {app.youthProfile?.skills && (
                       <div className="flex flex-wrap gap-2 mb-3">
                         {app.youthProfile.skills.slice(0, 5).map((skill, idx) => (
-                          <Badge key={idx} variant="info" className="text-xs">
+                          <Badge key={idx} variant="gray" className="text-xs">
                             {skill}
                           </Badge>
                         ))}
@@ -230,6 +232,21 @@ const ViewApplications = () => {
                   onChange={(e) => setNewStatus(e.target.value)}
                 />
               </div>
+
+              {/* Interview Date */}
+              {newStatus === 'interview' && (
+                <div>
+                  <label className="block text-[10px] uppercase tracking-label text-stone-400 mb-2">
+                    Interview Date & Time
+                  </label>
+                  <input
+                    type="datetime-local"
+                    value={interviewDate}
+                    onChange={(e) => setInterviewDate(e.target.value)}
+                    className="w-full border-0 border-b border-stone-200 py-2 text-sm text-stone-900 bg-transparent focus:outline-none focus:border-primary"
+                  />
+                </div>
+              )}
 
               {/* Employer Notes */}
               <Textarea

@@ -95,7 +95,7 @@ const EmployerProfile = () => {
       <div className="max-w-4xl space-y-6">
         <div className="border-b border-stone-100 pb-8 mb-8">
           <p className="text-[10px] uppercase tracking-luxury text-stone-400 mb-2">Account</p>
-          <h1 className="font-display font-light text-stone-900 text-4xl" style={{ letterSpacing: '-0.022em' }}>Company Profile</h1>
+          <h1 className="font-display font-light text-stone-900 text-3xl sm:text-4xl" style={{ letterSpacing: '-0.022em' }}>Company Profile</h1>
           <p className="text-stone-400 text-sm mt-2">Manage your company information</p>
         </div>
 

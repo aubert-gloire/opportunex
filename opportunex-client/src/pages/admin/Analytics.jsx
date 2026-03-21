@@ -11,7 +11,7 @@ const adminSidebarLinks = [
   { path: '/admin/analytics', label: 'Analytics', icon: <BarChart3 className="w-4 h-4" /> },
 ];
 
-const COLORS = ['#1E3A5F', '#F59E0B', '#10B981', '#EF4444', '#8B5CF6'];
+const COLORS = ['#1E3A5F', '#4F7CAC', '#6B9E78', '#C4A46B', '#9B8EC4'];
 
 const Analytics = () => {
   const { data: analyticsData, isLoading } = useQuery({
@@ -48,7 +48,7 @@ const Analytics = () => {
       <div className="space-y-6">
         <div className="border-b border-stone-100 pb-8 mb-8">
           <p className="text-[10px] uppercase tracking-luxury text-stone-400 mb-2">Administration</p>
-          <h1 className="font-display font-light text-stone-900 text-4xl" style={{ letterSpacing: '-0.022em' }}>Analytics & Reports</h1>
+          <h1 className="font-display font-light text-stone-900 text-3xl sm:text-4xl" style={{ letterSpacing: '-0.022em' }}>Analytics & Reports</h1>
           <p className="text-stone-400 text-sm mt-2">Detailed platform insights</p>
         </div>
 

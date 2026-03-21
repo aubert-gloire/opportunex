@@ -3,6 +3,7 @@ import Application from '../models/Application.js';
 import Job from '../models/Job.js';
 import YouthProfile from '../models/YouthProfile.js';
 import { sendEmail, emailTemplates } from '../utils/sendEmail.js';
+import { sendSMS, smsTemplates } from '../utils/sendSMS.js';
 import User from '../models/User.js';
 
 // @desc    Apply to a job
@@ -239,12 +240,19 @@ export const updateApplicationStatus = async (req, res) => {
 
     await application.save();
 
-    // Send email notification to applicant
+    // Send email + SMS notification to applicant
     await sendEmail({
       email: application.applicant.email,
       subject: 'Application Status Update',
       html: emailTemplates.applicationStatusUpdate(application.job.title, status),
     });
+
+    if (application.applicant.phone) {
+      sendSMS(
+        application.applicant.phone,
+        smsTemplates.applicationStatusUpdate(application.job.title, status)
+      ).catch(() => {}); // fire-and-forget, don't block response
+    }
 
     res.json({
       success: true,

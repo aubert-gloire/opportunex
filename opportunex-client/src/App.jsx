@@ -27,13 +27,16 @@ import Courses from './pages/youth/Courses';
 import CourseDetail from './pages/youth/CourseDetail';
 import MyCourses from './pages/youth/MyCourses';
 import CoursePlayer from './pages/youth/CoursePlayer';
+import Certificate from './pages/youth/Certificate';
 
 // Employer Pages
 import EmployerDashboard from './pages/employer/EmployerDashboard';
 import EmployerProfile from './pages/employer/EmployerProfile';
 import PostJob from './pages/employer/PostJob';
+import EditJob from './pages/employer/EditJob';
 import MyPostings from './pages/employer/MyPostings';
 import TalentSearch from './pages/employer/TalentSearch';
+import TalentProfile from './pages/employer/TalentProfile';
 import ViewApplications from './pages/employer/ViewApplications';
 import Subscription from './pages/employer/Subscription';
 
@@ -41,6 +44,7 @@ import Subscription from './pages/employer/Subscription';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import ManageUsers from './pages/admin/ManageUsers';
 import Analytics from './pages/admin/Analytics';
+
 
 function App() {
   const { isAuthenticated, user } = useAuth();
@@ -169,6 +173,14 @@ function App() {
               </PrivateRoute>
             }
           />
+          <Route
+            path="/youth/certificate/:id"
+            element={
+              <PrivateRoute allowedRoles={['youth']}>
+                <Certificate />
+              </PrivateRoute>
+            }
+          />
 
           {/* Employer Routes */}
           <Route
@@ -196,6 +208,14 @@ function App() {
             }
           />
           <Route
+            path="/employer/edit-job/:id"
+            element={
+              <PrivateRoute allowedRoles={['employer']}>
+                <EditJob />
+              </PrivateRoute>
+            }
+          />
+          <Route
             path="/employer/my-postings"
             element={
               <PrivateRoute allowedRoles={['employer']}>
@@ -208,6 +228,14 @@ function App() {
             element={
               <PrivateRoute allowedRoles={['employer']}>
                 <TalentSearch />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/talent/:id"
+            element={
+              <PrivateRoute allowedRoles={['employer', 'admin']}>
+                <TalentProfile />
               </PrivateRoute>
             }
           />

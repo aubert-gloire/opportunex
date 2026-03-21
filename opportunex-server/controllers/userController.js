@@ -1,7 +1,75 @@
+import path from 'path';
+import fs from 'fs';
 import User from '../models/User.js';
 import YouthProfile from '../models/YouthProfile.js';
 import EmployerProfile from '../models/EmployerProfile.js';
-import cloudinary from '../config/cloudinary.js';
+
+// Base URL for locally served upload files
+const uploadBaseUrl = (req) =>
+  `${req.protocol}://${req.get('host')}/uploads`;
+
+// @desc    Search youth talent profiles (employers)
+// @route   GET /api/users/talent
+// @access  Private (Employer)
+export const searchTalent = async (req, res) => {
+  try {
+    const { search, university, sector, skills, page = 1, limit = 12 } = req.query;
+
+    const profileQuery = {};
+    if (university) profileQuery.university = university;
+    if (sector) profileQuery.preferredSectors = sector;
+    if (skills) {
+      profileQuery.$or = [
+        { skills: new RegExp(skills, 'i') },
+        { 'verifiedSkills.skill': new RegExp(skills, 'i') },
+      ];
+    }
+
+    if (search) {
+      const matchingUsers = await User.find({
+        role: 'youth',
+        isActive: true,
+        $or: [
+          { firstName: new RegExp(search, 'i') },
+          { lastName: new RegExp(search, 'i') },
+        ],
+      }).select('_id');
+      profileQuery.user = { $in: matchingUsers.map((u) => u._id) };
+    }
+
+    const profiles = await YouthProfile.find(profileQuery)
+      .populate('user', 'firstName lastName avatar email isActive')
+      .sort('-profileCompletionPercentage')
+      .limit(Number(limit))
+      .skip((page - 1) * Number(limit));
+
+    const active = profiles.filter((p) => p.user?.isActive);
+    const count = await YouthProfile.countDocuments(profileQuery);
+
+    res.json({
+      success: true,
+      count,
+      totalPages: Math.ceil(count / limit),
+      candidates: active.map((p) => ({
+        _id: p.user._id,
+        firstName: p.user.firstName,
+        lastName: p.user.lastName,
+        avatar: p.user.avatar,
+        email: p.user.email,
+        university: p.university,
+        major: p.major,
+        location: p.location,
+        bio: p.bio,
+        skills: p.skills,
+        verifiedSkills: p.verifiedSkills,
+        profileCompletionPercentage: p.profileCompletionPercentage,
+        cv: p.cv,
+      })),
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Error searching talent', error: error.message });
+  }
+};
 
 // @desc    Get user profile
 // @route   GET /api/users/profile
@@ -88,32 +156,28 @@ export const uploadAvatar = async (req, res) => {
       });
     }
 
-    // Upload to Cloudinary
-    const result = await new Promise((resolve, reject) => {
-      const uploadStream = cloudinary.uploader.upload_stream(
-        {
-          folder: 'opportunex/avatars',
-          transformation: [
-            { width: 400, height: 400, crop: 'fill', gravity: 'face' },
-          ],
-        },
-        (error, result) => {
-          if (error) reject(error);
-          else resolve(result);
-        }
-      );
-      uploadStream.end(req.file.buffer);
-    });
+    const avatarUrl = `${uploadBaseUrl(req)}/avatars/${req.file.filename}`;
 
-    // Update user avatar
+    // Delete old avatar file if it was a local upload
     const user = await User.findById(req.user.id);
-    user.avatar = result.secure_url;
+    if (user.avatar && user.avatar.includes('/uploads/avatars/')) {
+      const oldPath = path.join(
+        path.dirname(new URL(import.meta.url).pathname),
+        '..',
+        'uploads',
+        'avatars',
+        path.basename(user.avatar)
+      );
+      if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
+    }
+
+    user.avatar = avatarUrl;
     await user.save();
 
     res.json({
       success: true,
       message: 'Avatar updated successfully',
-      avatar: result.secure_url,
+      avatar: avatarUrl,
     });
   } catch (error) {
     res.status(500).json({
@@ -212,32 +276,31 @@ export const uploadCV = async (req, res) => {
       });
     }
 
-    // Upload to Cloudinary
-    const result = await new Promise((resolve, reject) => {
-      const uploadStream = cloudinary.uploader.upload_stream(
-        {
-          folder: 'opportunex/cvs',
-          resource_type: 'raw',
-        },
-        (error, result) => {
-          if (error) reject(error);
-          else resolve(result);
-        }
-      );
-      uploadStream.end(req.file.buffer);
-    });
+    const cvUrl = `${uploadBaseUrl(req)}/cvs/${req.file.filename}`;
 
-    // Update youth profile
+    // Delete old CV file if it was a local upload
+    const existingProfile = await YouthProfile.findOne({ user: req.user.id });
+    if (existingProfile?.cv && existingProfile.cv.includes('/uploads/cvs/')) {
+      const oldPath = path.join(
+        path.dirname(new URL(import.meta.url).pathname),
+        '..',
+        'uploads',
+        'cvs',
+        path.basename(existingProfile.cv)
+      );
+      if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
+    }
+
     const profile = await YouthProfile.findOneAndUpdate(
       { user: req.user.id },
-      { cv: result.secure_url },
+      { cv: cvUrl },
       { new: true }
     );
 
     res.json({
       success: true,
       message: 'CV uploaded successfully',
-      cv: result.secure_url,
+      cv: cvUrl,
     });
   } catch (error) {
     res.status(500).json({

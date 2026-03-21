@@ -11,6 +11,7 @@ import {
   getCourseProgress,
   rateCourse,
   getRecommendedCourses,
+  getCertificate,
 } from '../controllers/courseController.js';
 import { protect, restrictTo } from '../middleware/auth.js';
 
@@ -26,6 +27,7 @@ router.post('/:id/enroll', protect, restrictTo('youth'), enrollInCourse);
 router.post('/:id/lessons/:lessonId/complete', protect, restrictTo('youth'), markLessonComplete);
 router.get('/:id/progress', protect, restrictTo('youth'), getCourseProgress);
 router.post('/:id/rate', protect, restrictTo('youth'), rateCourse);
+router.get('/:id/certificate', protect, restrictTo('youth'), getCertificate);
 
 // Admin routes
 router.post('/', protect, restrictTo('admin'), createCourse);

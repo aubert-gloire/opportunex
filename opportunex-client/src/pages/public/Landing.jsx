@@ -1,6 +1,9 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { Check } from 'lucide-react';
 import Button from '@/components/ui/Button';
+import { SUBSCRIPTION_PLANS } from '@/utils/constants';
+import { formatCurrency } from '@/utils/helpers';
 
 const fadeUp = {
   hidden:  { opacity: 0, y: 28 },
@@ -268,6 +271,83 @@ const Landing = () => {
             </motion.div>
 
           </div>
+        </div>
+      </section>
+
+      {/* ── Pricing ──────────────────────────────────────────── */}
+      <section className="py-32 bg-stone-50 border-t border-stone-100">
+        <div className="max-w-7xl mx-auto px-6 lg:px-10">
+
+          <motion.div
+            className="mb-20"
+            variants={stagger}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-80px' }}
+          >
+            <motion.p variants={fadeUp} className="text-[10px] uppercase tracking-luxury text-stone-400 mb-5">
+              For Employers
+            </motion.p>
+            <motion.h2
+              variants={fadeUp}
+              className="font-display font-light text-stone-900"
+              style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', letterSpacing: '-0.022em' }}
+            >
+              Simple, transparent <em>pricing</em>
+            </motion.h2>
+          </motion.div>
+
+          <motion.div
+            className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-stone-200 border border-stone-200"
+            variants={stagger}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-60px' }}
+          >
+            {SUBSCRIPTION_PLANS.map((plan, i) => {
+              const isPremium = plan.name === 'premium';
+              return (
+                <motion.div
+                  key={plan.name}
+                  variants={fadeUp}
+                  className={`p-10 flex flex-col ${isPremium ? 'bg-primary' : 'bg-white'}`}
+                >
+                  <div className="mb-8">
+                    <p className={`text-[10px] uppercase tracking-luxury mb-4 ${isPremium ? 'text-white/40' : 'text-stone-400'}`}>
+                      {plan.label}
+                    </p>
+                    <div
+                      className={`font-display font-light leading-none mb-1 ${isPremium ? 'text-white' : 'text-stone-900'}`}
+                      style={{ fontSize: 'clamp(2.5rem, 4vw, 3.5rem)', letterSpacing: '-0.03em' }}
+                    >
+                      {plan.price === 0 ? 'Free' : formatCurrency(plan.price)}
+                    </div>
+                    {plan.price > 0 && (
+                      <p className={`text-sm ${isPremium ? 'text-white/40' : 'text-stone-400'}`}>per month</p>
+                    )}
+                  </div>
+
+                  <ul className="space-y-3 flex-1 mb-10">
+                    {plan.features.map((f, j) => (
+                      <li key={j} className={`flex items-start gap-2.5 text-sm ${isPremium ? 'text-white/70' : 'text-stone-500'}`}>
+                        <Check className={`w-4 h-4 flex-shrink-0 mt-0.5 ${isPremium ? 'text-white/50' : 'text-green-600'}`} />
+                        {f}
+                      </li>
+                    ))}
+                  </ul>
+
+                  <Link to="/register?role=employer">
+                    <Button
+                      variant={isPremium ? 'outline' : 'primary'}
+                      className={`w-full ${isPremium ? 'border-white/30 text-white hover:bg-white hover:text-primary' : ''}`}
+                    >
+                      Get Started
+                    </Button>
+                  </Link>
+                </motion.div>
+              );
+            })}
+          </motion.div>
         </div>
       </section>
 

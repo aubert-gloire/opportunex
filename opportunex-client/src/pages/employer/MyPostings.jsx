@@ -67,7 +67,7 @@ const MyPostings = () => {
         <div className="flex items-center justify-between">
           <div className="border-b border-stone-100 pb-8 mb-8 flex-1">
             <p className="text-[10px] uppercase tracking-luxury text-stone-400 mb-2">Recruiting</p>
-            <h1 className="font-display font-light text-stone-900 text-4xl" style={{ letterSpacing: '-0.022em' }}>My Job Postings</h1>
+            <h1 className="font-display font-light text-stone-900 text-3xl sm:text-4xl" style={{ letterSpacing: '-0.022em' }}>My Job Postings</h1>
             <p className="text-stone-400 text-sm mt-2">Manage your job listings</p>
           </div>
           <Link to="/employer/post-job" className="ml-4">

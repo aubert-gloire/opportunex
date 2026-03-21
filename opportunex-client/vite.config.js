@@ -18,4 +18,18 @@ export default defineConfig({
       },
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vendor-react':   ['react', 'react-dom', 'react-router-dom'],
+          'vendor-query':   ['@tanstack/react-query'],
+          'vendor-charts':  ['recharts'],
+          'vendor-forms':   ['react-hook-form', '@hookform/resolvers', 'zod'],
+          'vendor-ui':      ['lucide-react', 'react-hot-toast', 'framer-motion'],
+          'vendor-payment': ['flutterwave-react-v3'],
+        },
+      },
+    },
+  },
 });

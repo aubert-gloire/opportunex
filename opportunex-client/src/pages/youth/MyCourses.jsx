@@ -48,17 +48,13 @@ const MyCourses = () => {
   return (
     <DashboardLayout sidebarLinks={youthSidebarLinks}>
       <div className="space-y-6">
-        <div className="flex items-center justify-between">
-          <div className="border-b border-stone-100 pb-8 mb-8 flex-1">
+        <div className="border-b border-stone-100 pb-8 mb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+          <div>
             <p className="text-[10px] uppercase tracking-luxury text-stone-400 mb-2">Learning</p>
-            <h1 className="font-display font-light text-stone-900 text-4xl" style={{ letterSpacing: '-0.022em' }}>My Courses</h1>
+            <h1 className="font-display font-light text-stone-900 text-3xl sm:text-4xl" style={{ letterSpacing: '-0.022em' }}>My Courses</h1>
             <p className="text-stone-400 text-sm mt-2">Track your learning progress</p>
           </div>
-          <Button
-            variant="primary"
-            onClick={() => navigate('/youth/courses')}
-            className="ml-4"
-          >
+          <Button variant="primary" onClick={() => navigate('/youth/courses')} className="self-start sm:self-auto">
             Browse Courses
           </Button>
         </div>
@@ -106,7 +102,7 @@ const MyCourses = () => {
               return (
                 <Card key={enrollment._id} hover>
                   <CardContent className="pt-6">
-                    <div className="flex gap-4">
+                    <div className="flex flex-col sm:flex-row gap-4">
                       {/* Course Thumbnail */}
                       <div className="w-24 h-24 flex-shrink-0">
                         {course.thumbnail ? (
@@ -165,11 +161,11 @@ const MyCourses = () => {
                               >
                                 Review Course
                               </Button>
-                              {enrollment.certificateUrl && (
+                              {enrollment.certificateIssued && (
                                 <Button
                                   variant="accent"
                                   size="sm"
-                                  onClick={() => window.open(enrollment.certificateUrl, '_blank')}
+                                  onClick={() => navigate(`/youth/certificate/${course._id}`)}
                                 >
                                   Certificate
                                 </Button>
@@ -205,7 +201,7 @@ const MyCourses = () => {
           </div>
         ) : (
           <EmptyState
-            icon={<BookOpen className="w-16 h-16" />}
+            icon={BookOpen}
             title="No enrolled courses"
             description="Start learning by browsing available courses"
             action={

@@ -87,10 +87,10 @@ const YouthProfile = () => {
     try {
       const response = await userAPI.uploadAvatar(formData);
       updateUser({ ...user, avatar: response.data.avatar });
-      toast.success('Avatar updated successfully');
+      toast.success('Profile photo updated');
       refetch();
     } catch (error) {
-      toast.error('Failed to upload avatar');
+      toast.error('Failed to upload profile photo');
     } finally {
       setUploading(false);
     }
@@ -122,25 +122,36 @@ const YouthProfile = () => {
       <div className="space-y-6">
         <div className="border-b border-stone-100 pb-8 mb-8">
           <p className="text-[10px] uppercase tracking-luxury text-stone-400 mb-2">Account</p>
-          <h1 className="font-display font-light text-stone-900 text-4xl" style={{ letterSpacing: '-0.022em' }}>My Profile</h1>
+          <h1 className="font-display font-light text-stone-900 text-3xl sm:text-4xl" style={{ letterSpacing: '-0.022em' }}>My Profile</h1>
           <p className="text-stone-400 text-sm mt-2">Manage your professional profile</p>
         </div>
 
         {/* Profile Header */}
         <Card>
-          <div className="flex items-center gap-6">
-            <div className="relative">
-              <Avatar
-                src={user?.avatar}
-                firstName={user?.firstName}
-                lastName={user?.lastName}
-                size="2xl"
-              />
+          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
+            {/* Profile Picture Upload */}
+            <div className="flex flex-col items-center gap-3 flex-shrink-0">
+              <p className="text-[10px] uppercase tracking-label text-stone-400">Profile Photo</p>
+              <div className="relative w-28 h-28">
+                <Avatar
+                  src={user?.avatar}
+                  firstName={user?.firstName}
+                  lastName={user?.lastName}
+                  size="2xl"
+                  className="w-28 h-28"
+                />
+                {uploading && (
+                  <div className="absolute inset-0 bg-white/70 flex items-center justify-center">
+                    <div className="w-5 h-5 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                  </div>
+                )}
+              </div>
               <label
                 htmlFor="avatar-upload"
-                className="absolute bottom-0 right-0 bg-accent text-white p-2 cursor-pointer hover:bg-accent-600 transition-colors"
+                className="flex items-center gap-1.5 text-[11px] uppercase tracking-label text-stone-400 hover:text-primary transition-colors cursor-pointer border-b border-stone-200 hover:border-primary pb-px"
               >
-                <Upload className="w-4 h-4" />
+                <Upload className="w-3 h-3" />
+                {user?.avatar ? 'Change photo' : 'Upload photo'}
                 <input
                   id="avatar-upload"
                   type="file"
@@ -152,12 +163,13 @@ const YouthProfile = () => {
               </label>
             </div>
 
+            {/* Name & Status */}
             <div className="flex-1">
               <h2 className="font-display font-light text-stone-900 text-2xl" style={{ letterSpacing: '-0.022em' }}>
                 {user?.firstName} {user?.lastName}
               </h2>
-              <p className="text-stone-400 text-sm">{profile?.major || 'Student'}</p>
-              <div className="mt-2">
+              <p className="text-stone-400 text-sm mt-0.5">{profile?.major || 'Student'} {profile?.university ? `· ${profile.university}` : ''}</p>
+              <div className="mt-3">
                 <Badge variant="info">
                   Profile {profile?.profileCompletionPercentage || 0}% Complete
                 </Badge>

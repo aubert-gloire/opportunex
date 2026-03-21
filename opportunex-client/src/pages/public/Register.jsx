@@ -8,6 +8,7 @@ import { useAuth } from '@/context/AuthContext';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import Select from '@/components/ui/Select';
+import Logo from '@/components/ui/Logo';
 import { UNIVERSITIES } from '@/utils/constants';
 
 const registerSchema = z.object({
@@ -79,9 +80,7 @@ const Register = () => {
         />
 
         <div className="relative z-10">
-          <span className="text-[10px] uppercase tracking-luxury text-white/40 font-medium">
-            Est. Kigali, 2024
-          </span>
+          <Logo size="sm" variant="light" markOnly />
         </div>
 
         <div className="relative z-10">
@@ -111,9 +110,9 @@ const Register = () => {
       {/* ── Right form panel ──────────────────────────── */}
       <div className="flex-1 bg-white flex flex-col justify-center overflow-y-auto px-8 md:px-14 lg:px-20 py-14">
 
-        {/* Mobile wordmark */}
+        {/* Mobile logo */}
         <div className="lg:hidden mb-10">
-          <span className="font-display text-xl italic text-primary">OpportuneX</span>
+          <Logo size="sm" variant="dark" />
         </div>
 
         <div className="max-w-[440px] w-full mx-auto">

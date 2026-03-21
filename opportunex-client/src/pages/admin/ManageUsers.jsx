@@ -61,7 +61,7 @@ const ManageUsers = () => {
       <div className="space-y-6">
         <div className="border-b border-stone-100 pb-8 mb-8">
           <p className="text-[10px] uppercase tracking-luxury text-stone-400 mb-2">Administration</p>
-          <h1 className="font-display font-light text-stone-900 text-4xl" style={{ letterSpacing: '-0.022em' }}>Manage Users</h1>
+          <h1 className="font-display font-light text-stone-900 text-3xl sm:text-4xl" style={{ letterSpacing: '-0.022em' }}>Manage Users</h1>
           <p className="text-stone-400 text-sm mt-2">View and manage platform users</p>
         </div>
 

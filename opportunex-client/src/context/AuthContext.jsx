@@ -22,8 +22,14 @@ export const AuthProvider = ({ children }) => {
       const storedUser = localStorage.getItem('user');
 
       if (storedToken && storedUser) {
-        setToken(storedToken);
-        setUser(JSON.parse(storedUser));
+        try {
+          // Verify token is still valid against the server
+          const response = await authAPI.getMe();
+          setToken(storedToken);
+          setUser(response.data.user || JSON.parse(storedUser));
+        } catch {
+          // Token is stale/invalid — interceptor already cleared localStorage
+        }
       }
 
       setLoading(false);

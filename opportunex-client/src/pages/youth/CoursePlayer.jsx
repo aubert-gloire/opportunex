@@ -13,7 +13,7 @@ import {
   FileText,
   ExternalLink,
 } from 'lucide-react';
-import { courseAPI } from '@/api';
+import { courseAPI, assignmentAPI } from '@/api';
 import Card, { CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import Badge from '@/components/ui/Badge';
@@ -33,6 +33,7 @@ const CoursePlayer = () => {
   const [showRatingModal, setShowRatingModal] = useState(false);
   const [rating, setRating] = useState(5);
   const [review, setReview] = useState('');
+  const [answers, setAnswers] = useState({});
 
   const { data, isLoading } = useQuery({
     queryKey: ['course', id],
@@ -64,6 +65,28 @@ const CoursePlayer = () => {
     },
   });
 
+  const { data: assignmentsData } = useQuery({
+    queryKey: ['assignments', id, currentLesson?._id],
+    queryFn: async () => {
+      const response = await assignmentAPI.getLessonAssignments(id, currentLesson._id);
+      return response.data.assignments || [];
+    },
+    enabled: !!currentLesson?._id,
+  });
+
+  const submitAssignmentMutation = useMutation({
+    mutationFn: ({ assignmentId, answers: submittedAnswers }) =>
+      assignmentAPI.submitAssignment(assignmentId, { answers: submittedAnswers }),
+    onSuccess: (_, { assignmentId }) => {
+      toast.success('Assignment submitted!');
+      queryClient.invalidateQueries(['assignments', id, currentLesson?._id]);
+      setAnswers((prev) => ({ ...prev, [assignmentId]: {} }));
+    },
+    onError: (error) => {
+      toast.error(error.response?.data?.message || 'Failed to submit assignment');
+    },
+  });
+
   const ratingMutation = useMutation({
     mutationFn: (data) => courseAPI.rateCourse(id, data),
     onSuccess: () => {
@@ -79,12 +102,19 @@ const CoursePlayer = () => {
 
   const course = data?.course;
   const enrollment = progressData || data?.enrollment;
+  const sortedLessonsEarly = course ? [...course.lessons].sort((a, b) => a.order - b.order) : [];
+  const currentLesson = sortedLessonsEarly[currentLessonIndex];
 
   useEffect(() => {
     if (enrollment?.currentLesson) {
       setCurrentLessonIndex(enrollment.currentLesson);
     }
   }, [enrollment]);
+
+  // Reset answer drafts when switching lessons
+  useEffect(() => {
+    setAnswers({});
+  }, [currentLessonIndex]);
 
   // Check if course is completed and show rating modal
   useEffect(() => {
@@ -120,8 +150,7 @@ const CoursePlayer = () => {
     );
   }
 
-  const sortedLessons = [...course.lessons].sort((a, b) => a.order - b.order);
-  const currentLesson = sortedLessons[currentLessonIndex];
+  const sortedLessons = sortedLessonsEarly;
   const isLastLesson = currentLessonIndex === sortedLessons.length - 1;
   const isFirstLesson = currentLessonIndex === 0;
 
@@ -284,6 +313,148 @@ const CoursePlayer = () => {
                   </div>
                 )}
 
+                {/* Assignments */}
+                {assignmentsData && assignmentsData.length > 0 && (
+                  <div className="mb-6">
+                    <h3 className="text-[10px] uppercase tracking-label text-stone-400 mb-4">
+                      Lesson Assignment{assignmentsData.length > 1 ? 's' : ''}
+                    </h3>
+                    <div className="space-y-6">
+                      {assignmentsData.map((assignment) => {
+                        const alreadySubmitted = !!assignment.submission;
+                        const sub = assignment.submission;
+                        const answerMap = answers[assignment._id] || {};
+
+                        return (
+                          <div key={assignment._id} className="border border-stone-100 p-5">
+                            <div className="flex items-start justify-between mb-1">
+                              <h4 className="font-light text-stone-900" style={{ letterSpacing: '-0.01em' }}>
+                                {assignment.title}
+                              </h4>
+                              {alreadySubmitted && (
+                                <Badge variant={sub.passed ? 'success' : 'danger'}>
+                                  {sub.score}% — {sub.passed ? 'Passed' : 'Failed'}
+                                </Badge>
+                              )}
+                            </div>
+                            {assignment.description && (
+                              <p className="text-stone-400 text-sm mb-4">{assignment.description}</p>
+                            )}
+
+                            <div className="space-y-4">
+                              {assignment.questions.map((question, qi) => {
+                                const gradedAnswer = sub?.answers?.find((a) => a.questionIndex === qi);
+                                return (
+                                  <div key={qi} className="bg-stone-50 p-4">
+                                    <p className="text-sm text-stone-900 font-light mb-3">
+                                      <span className="text-stone-400 mr-1">{qi + 1}.</span>
+                                      {question.text}
+                                      <span className="text-stone-400 ml-2 text-xs">({question.points} pt{question.points !== 1 ? 's' : ''})</span>
+                                    </p>
+
+                                    {alreadySubmitted ? (
+                                      <div className="space-y-1">
+                                        <p className="text-sm text-stone-600">
+                                          <span className="text-stone-400 text-xs uppercase tracking-label mr-2">Your answer:</span>
+                                          {gradedAnswer?.answer}
+                                        </p>
+                                        {gradedAnswer?.isCorrect != null && (
+                                          <p className={`text-xs font-light ${gradedAnswer.isCorrect ? 'text-green-600' : 'text-red-500'}`}>
+                                            {gradedAnswer.isCorrect ? `Correct — ${gradedAnswer.pointsEarned} pts` : `Incorrect — ${gradedAnswer.pointsEarned} pts`}
+                                          </p>
+                                        )}
+                                        {gradedAnswer?.aiFeedback && (
+                                          <p className="text-xs text-stone-400 italic mt-1">{gradedAnswer.aiFeedback}</p>
+                                        )}
+                                      </div>
+                                    ) : question.type === 'multiple-choice' && question.options?.length > 0 ? (
+                                      <div className="space-y-2">
+                                        {question.options.map((opt, oi) => (
+                                          <label key={oi} className="flex items-center gap-2 cursor-pointer group">
+                                            <input
+                                              type="radio"
+                                              name={`q-${assignment._id}-${qi}`}
+                                              value={opt}
+                                              checked={answerMap[qi] === opt}
+                                              onChange={() =>
+                                                setAnswers((prev) => ({
+                                                  ...prev,
+                                                  [assignment._id]: { ...answerMap, [qi]: opt },
+                                                }))
+                                              }
+                                              className="accent-primary"
+                                            />
+                                            <span className="text-sm text-stone-700 font-light group-hover:text-stone-900">{opt}</span>
+                                          </label>
+                                        ))}
+                                      </div>
+                                    ) : question.type === 'true-false' ? (
+                                      <div className="flex gap-4">
+                                        {['True', 'False'].map((opt) => (
+                                          <label key={opt} className="flex items-center gap-2 cursor-pointer">
+                                            <input
+                                              type="radio"
+                                              name={`q-${assignment._id}-${qi}`}
+                                              value={opt}
+                                              checked={answerMap[qi] === opt}
+                                              onChange={() =>
+                                                setAnswers((prev) => ({
+                                                  ...prev,
+                                                  [assignment._id]: { ...answerMap, [qi]: opt },
+                                                }))
+                                              }
+                                              className="accent-primary"
+                                            />
+                                            <span className="text-sm text-stone-700 font-light">{opt}</span>
+                                          </label>
+                                        ))}
+                                      </div>
+                                    ) : (
+                                      <textarea
+                                        className="w-full border border-stone-200 px-3 py-2 text-sm text-stone-900 font-light focus:outline-none focus:border-primary transition-colors resize-none"
+                                        rows={3}
+                                        placeholder="Write your answer..."
+                                        value={answerMap[qi] || ''}
+                                        onChange={(e) =>
+                                          setAnswers((prev) => ({
+                                            ...prev,
+                                            [assignment._id]: { ...answerMap, [qi]: e.target.value },
+                                          }))
+                                        }
+                                      />
+                                    )}
+                                  </div>
+                                );
+                              })}
+                            </div>
+
+                            {!alreadySubmitted && (
+                              <div className="mt-4 flex justify-end">
+                                <Button
+                                  variant="primary"
+                                  size="sm"
+                                  disabled={submitAssignmentMutation.isPending}
+                                  onClick={() => {
+                                    const formattedAnswers = Object.entries(answerMap).map(
+                                      ([qi, answer]) => ({ questionIndex: Number(qi), answer })
+                                    );
+                                    submitAssignmentMutation.mutate({
+                                      assignmentId: assignment._id,
+                                      answers: formattedAnswers,
+                                    });
+                                  }}
+                                >
+                                  {submitAssignmentMutation.isPending ? 'Submitting...' : 'Submit Assignment'}
+                                </Button>
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+
                 {/* Navigation */}
                 <div className="flex items-center justify-between pt-6 border-t border-stone-100">
                   <Button
@@ -312,19 +483,29 @@ const CoursePlayer = () => {
             {enrollment.status === 'completed' && (
               <Card className="border-green-200 bg-green-50">
                 <CardContent className="pt-6">
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center justify-between gap-4 flex-wrap">
                     <div>
                       <h3 className="font-display font-light text-stone-900 text-xl mb-1" style={{ letterSpacing: '-0.01em' }}>Congratulations!</h3>
                       <p className="text-stone-500 text-sm">
-                        You've completed this course. Your certificate is ready!
+                        You've completed this course. Your certificate is ready.
                       </p>
                     </div>
-                    <Button
-                      variant="accent"
-                      onClick={() => setShowRatingModal(true)}
-                    >
-                      Rate Course
-                    </Button>
+                    <div className="flex gap-2">
+                      <Button
+                        variant="primary"
+                        onClick={() => navigate(`/youth/certificate/${id}`)}
+                        className="flex items-center gap-2"
+                      >
+                        <Award className="w-4 h-4" />
+                        View Certificate
+                      </Button>
+                      <Button
+                        variant="outline"
+                        onClick={() => setShowRatingModal(true)}
+                      >
+                        Rate Course
+                      </Button>
+                    </div>
                   </div>
                 </CardContent>
               </Card>

@@ -48,7 +48,7 @@ const Courses = () => {
       <div className="space-y-6">
         <div className="border-b border-stone-100 pb-8 mb-8">
           <p className="text-[10px] uppercase tracking-luxury text-stone-400 mb-2">Learning</p>
-          <h1 className="font-display font-light text-stone-900 text-4xl" style={{ letterSpacing: '-0.022em' }}>Browse Courses</h1>
+          <h1 className="font-display font-light text-stone-900 text-3xl sm:text-4xl" style={{ letterSpacing: '-0.022em' }}>Browse Courses</h1>
           <p className="text-stone-400 text-sm mt-2">Learn new skills and advance your career</p>
         </div>
 
@@ -65,42 +65,45 @@ const Courses = () => {
                 />
               </div>
               <Select
+                placeholder="All Categories"
+                options={[
+                  { value: '', label: 'All Categories' },
+                  { value: 'Technical', label: 'Technical' },
+                  { value: 'Business', label: 'Business' },
+                  { value: 'Soft Skills', label: 'Soft Skills' },
+                  { value: 'Design', label: 'Design' },
+                  { value: 'Marketing', label: 'Marketing' },
+                  { value: 'Finance', label: 'Finance' },
+                ]}
                 value={filters.category}
                 onChange={(e) => handleFilterChange('category', e.target.value)}
-              >
-                <option value="">All Categories</option>
-                <option value="Technical">Technical</option>
-                <option value="Business">Business</option>
-                <option value="Soft Skills">Soft Skills</option>
-                <option value="Design">Design</option>
-                <option value="Marketing">Marketing</option>
-                <option value="Finance">Finance</option>
-              </Select>
+              />
               <Select
+                placeholder="All Sectors"
+                options={[{ value: '', label: 'All Sectors' }, ...SECTORS.map((s) => ({ value: s, label: s }))]}
                 value={filters.sector}
                 onChange={(e) => handleFilterChange('sector', e.target.value)}
-              >
-                <option value="">All Sectors</option>
-                {SECTORS.map((sector) => (
-                  <option key={sector} value={sector}>{sector}</option>
-                ))}
-              </Select>
+              />
               <Select
+                placeholder="All Levels"
+                options={[
+                  { value: '', label: 'All Levels' },
+                  { value: 'beginner', label: 'Beginner' },
+                  { value: 'intermediate', label: 'Intermediate' },
+                  { value: 'advanced', label: 'Advanced' },
+                ]}
                 value={filters.level}
                 onChange={(e) => handleFilterChange('level', e.target.value)}
-              >
-                <option value="">All Levels</option>
-                <option value="beginner">Beginner</option>
-                <option value="intermediate">Intermediate</option>
-                <option value="advanced">Advanced</option>
-              </Select>
+              />
               <Select
+                placeholder="All Courses"
+                options={[
+                  { value: '', label: 'All Courses' },
+                  { value: 'true', label: 'Free Only' },
+                ]}
                 value={filters.isFree}
                 onChange={(e) => handleFilterChange('isFree', e.target.value)}
-              >
-                <option value="">All Courses</option>
-                <option value="true">Free Only</option>
-              </Select>
+              />
             </div>
           </CardContent>
         </Card>
@@ -144,7 +147,7 @@ const Courses = () => {
                     </div>
                   )}
                   {course.price === 0 && (
-                    <span className="absolute top-3 right-3 bg-green-500 text-white px-3 py-1 text-sm font-light">
+                    <span className="absolute top-3 right-3 bg-[#6B9E78] text-white px-3 py-1 text-[10px] uppercase tracking-label font-medium">
                       Free
                     </span>
                   )}
@@ -170,9 +173,9 @@ const Courses = () => {
                       <Users className="w-4 h-4" />
                       <span>{course.enrollmentCount} enrolled</span>
                     </div>
-                    {course.rating.count > 0 && (
+                    {course.rating?.count > 0 && (
                       <div className="flex items-center gap-1">
-                        <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                        <Star className="w-4 h-4 fill-[#C4A46B] text-[#C4A46B]" />
                         <span>{course.rating.average.toFixed(1)}</span>
                       </div>
                     )}
@@ -185,7 +188,7 @@ const Courses = () => {
 
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-stone-400">
-                      By {course.instructor.name}
+                      By {course.instructor?.name || 'Instructor'}
                     </span>
                     {course.price > 0 && (
                       <span className="font-display font-light text-primary text-lg">
@@ -199,7 +202,7 @@ const Courses = () => {
           </div>
         ) : (
           <EmptyState
-            icon={<BookOpen className="w-16 h-16" />}
+            icon={BookOpen}
             title="No courses found"
             description="Try adjusting your filters to see more courses"
           />
